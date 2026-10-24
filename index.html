@@ -4,21 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <!-- 網頁標題 -->
+  <!-- 網頁標題與社群預覽 -->
   <title>花言敘 Hua Narrative｜用服飾講述你的日常故事</title>
-
-  <!-- 🟢 新增：LINE / FB 社群分享預覽卡片標籤 (抓取這裡的文字顯示) -->
   <meta property="og:title" content="花言敘 Hua Narrative｜用服飾講述你的日常故事">
   <meta property="og:description" content="嚴選高品質親膚布料與俐落剪裁，平價也能穿出低調奢華質感。">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="花言敘 Hua Narrative">
   
-  <!-- Google Fonts -->
+  <!-- Google Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
@@ -50,39 +46,14 @@
   </script>
 
   <style>
-    body {
-      background-color: #F9F8F6;
-      color: #2C2A29;
-      font-family: 'Noto Serif TC', serif;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #F9F8F6;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #E5DFD8;
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #8C7A6B;
-    }
-
-    .smooth-transition {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+    body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', serif; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #F9F8F6; }
+    ::-webkit-scrollbar-thumb { background: #E5DFD8; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #8C7A6B; }
+    .smooth-transition { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-brand-light selection:text-brand-dark">
@@ -100,12 +71,8 @@
   <header class="sticky top-0 z-40 bg-cardbg/95 backdrop-blur-md border-b border-brand-border smooth-transition">
     <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
       
-      <!-- Left Controls: System Config & Search -->
+      <!-- Left Controls: Search -->
       <div class="flex items-center gap-1.5 sm:gap-2">
-        <button onclick="openSettingsModal()" class="p-2 rounded-full hover:bg-brand-light text-brand font-medium text-xs flex items-center gap-1.5 transition-colors border border-brand-border/80 px-3" title="系統與 API 設定">
-          <i class="fa-solid fa-gear text-brand"></i>
-          <span class="hidden sm:inline">系統設定</span>
-        </button>
         <button id="search-toggle-btn" class="p-2 rounded-full hover:bg-brand-light text-charcoal transition-colors" title="搜尋選品">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -152,7 +119,7 @@
     </div>
   </header>
 
-  <!-- Hero Subtle Banner -->
+  <!-- Hero Banner -->
   <section class="bg-gradient-to-b from-brand-light/50 to-oatmeal py-8 px-4 text-center border-b border-brand-border/40">
     <div class="max-w-2xl mx-auto space-y-2">
       <span class="text-xs tracking-[0.3em] font-garamond text-brand uppercase">2026 Spring / Summer Selects</span>
@@ -189,7 +156,7 @@
     <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
       <div class="col-span-full text-center py-16 space-y-3">
         <i class="fa-solid fa-spinner fa-spin text-3xl text-brand"></i>
-        <p class="text-subtext text-sm">服飾資料連線中...</p>
+        <p class="text-subtext text-sm">正在載入「花言敘」選品...</p>
       </div>
     </div>
 
@@ -243,9 +210,7 @@
         </div>
 
         <!-- Cart Items List -->
-        <div id="cart-items-container" class="flex-grow overflow-y-auto p-4 space-y-4 divide-y divide-brand-border/50">
-          <!-- Renders dynamically -->
-        </div>
+        <div id="cart-items-container" class="flex-grow overflow-y-auto p-4 space-y-4 divide-y divide-brand-border/50"></div>
 
         <!-- Step 1 Bottom Calculation & Proceed Button -->
         <div class="p-4 bg-cardbg border-t border-brand-border space-y-3">
@@ -366,7 +331,7 @@
               送出訂單並前往 LINE 發送
             </button>
             <p class="text-[10px] text-center text-subtext leading-relaxed">
-              點擊後系統會自動為您複製訂單明細，並開啟 LINE 對話傳送給「花言敘」專員！
+              點擊後系統會自動複製訂單明細，並為您開啟 LINE 傳送給「花言敘」客服專員！
             </p>
           </div>
 
@@ -391,9 +356,7 @@
         <p id="success-order-id" class="text-xs font-mono text-brand font-medium">訂單編號：#HN2026102401</p>
       </div>
 
-      <div class="bg-oatmeal p-3 rounded border border-brand-border/60 text-left text-xs space-y-1 text-subtext max-h-40 overflow-y-auto font-mono" id="copied-order-preview">
-        <!-- Preview text -->
-      </div>
+      <div class="bg-oatmeal p-3 rounded border border-brand-border/60 text-left text-xs space-y-1 text-subtext max-h-40 overflow-y-auto font-mono" id="copied-order-preview"></div>
 
       <div class="space-y-2 pt-2">
         <a id="line-direct-link" href="#" target="_blank" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs tracking-wider font-medium shadow transition-colors flex items-center justify-center gap-1.5">
@@ -408,36 +371,6 @@
         </button>
       </div>
 
-    </div>
-  </div>
-
-  <!-- ⚙️ System Settings Modal (Google API & LINE ID) -->
-  <div id="settings-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-    <div class="bg-cardbg rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-brand-border">
-      <div class="flex justify-between items-center border-b border-brand-border pb-3">
-        <h3 class="text-base font-medium text-charcoal flex items-center gap-2">
-          <i class="fa-solid fa-sliders text-brand"></i> 網站系統設定
-        </h3>
-        <button onclick="closeSettingsModal()" class="text-subtext hover:text-charcoal"><i class="fa-solid fa-xmark text-xl"></i></button>
-      </div>
-      
-      <div class="space-y-4 text-xs">
-        <div>
-          <label class="block text-subtext font-medium mb-1">Google Sheet API 網址</label>
-          <input type="text" id="cfg-api-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full p-2.5 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand font-mono text-[11px]">
-          <p class="text-[10px] text-subtext/70 mt-1">貼上 Google Apps Script 部署之 Web App 網址</p>
-        </div>
-        <div>
-          <label class="block text-subtext font-medium mb-1">LINE 官方帳號 ID</label>
-          <input type="text" id="cfg-line-id" placeholder="@hua_narrative" class="w-full p-2.5 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand font-mono text-[11px]">
-          <p class="text-[10px] text-subtext/70 mt-1">顧客點擊結帳時自動跳轉發送的官方 LINE 帳號</p>
-        </div>
-      </div>
-
-      <div class="flex gap-2 justify-end pt-2 border-t border-brand-border/60">
-        <button onclick="closeSettingsModal()" class="px-3 py-2 text-xs text-subtext hover:bg-oatmeal rounded">取消</button>
-        <button onclick="saveSettings()" class="px-4 py-2 text-xs bg-brand text-white rounded hover:bg-brand-dark shadow transition-colors">儲存並測試同步</button>
-      </div>
     </div>
   </div>
 
@@ -470,7 +403,15 @@
 
   <!-- App Script Logic -->
   <script>
-    // State Variables
+    // --------------------------------------------------
+    // ⚙️ 固定系統設定 (API 網址與 LINE ID)
+    // --------------------------------------------------
+    const API_URL = "https://script.google.com/macros/s/AKfycbyMjjG23l41ANx-jQLQCxh-0yDquqicdrVsf-HhtNSb33TZc3XRkYTM_CJMYNGx93GR/exec";
+    
+    // ⚠️ 請填入老婆正確的 LINE 官方帳號 ID (請至 LINE 官方帳號管理後台確認「Basic ID」)
+    const LINE_OFFICIAL_ID = "@flower_shop"; 
+    // --------------------------------------------------
+
     let products = [];
     let cart = [];
     let activeCategory = 'All';
@@ -478,67 +419,32 @@
     let currentStep = 1;
     let generatedOrderText = '';
 
-    const DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbyMjjG23l41ANx-jQLQCxh-0yDquqicdrVsf-HhtNSb33TZc3XRkYTM_CJMYNGx93GR/exec";
-    const DEFAULT_LINE_ID = "@hua_narrative";
-
-    // Init App
     document.addEventListener('DOMContentLoaded', () => {
-      loadConfig();
       setupEventListeners();
       fetchProducts();
     });
 
-    function loadConfig() {
-      const savedApi = localStorage.getItem('hua_api_url') || DEFAULT_API_URL;
-      const savedLine = localStorage.getItem('hua_line_id') || DEFAULT_LINE_ID;
-      document.getElementById('cfg-api-url').value = savedApi;
-      document.getElementById('cfg-line-id').value = savedLine;
-    }
-
-    function saveSettings() {
-      const apiUrl = document.getElementById('cfg-api-url').value.trim();
-      const lineId = document.getElementById('cfg-line-id').value.trim();
-
-      if (!apiUrl) {
-        showToast('請填寫有效的 Google Sheet API 網址！');
-        return;
-      }
-
-      localStorage.setItem('hua_api_url', apiUrl);
-      localStorage.setItem('hua_line_id', lineId || DEFAULT_LINE_ID);
-      
-      closeSettingsModal();
-      showToast('設定已儲存，重新載入商品中...');
-      fetchProducts();
-    }
-
     async function fetchProducts() {
-      const apiUrl = localStorage.getItem('hua_api_url') || DEFAULT_API_URL;
       const grid = document.getElementById('product-grid');
-      
       grid.innerHTML = `
         <div class="col-span-full text-center py-16 space-y-3">
           <i class="fa-solid fa-spinner fa-spin text-3xl text-brand"></i>
-          <p class="text-subtext text-sm">正在載入「花言敘」服飾選品...</p>
+          <p class="text-subtext text-sm">正在載入「花言敘」選品...</p>
         </div>`;
 
       try {
-        const res = await fetch(apiUrl);
+        const res = await fetch(API_URL);
         products = await res.json();
         renderProducts();
       } catch (err) {
         grid.innerHTML = `
           <div class="col-span-full text-center py-16 space-y-3">
-            <p class="text-red-500 text-sm font-medium">資料連線失敗！</p>
-            <p class="text-xs text-subtext">請確認 Google Sheet API 網址是否正確設定。</p>
-            <button onclick="openSettingsModal()" class="px-4 py-2 bg-brand text-white text-xs rounded hover:bg-brand-dark transition-colors">
-              重新設定 API 網址
-            </button>
+            <p class="text-red-500 text-sm font-medium">資料載入失敗！</p>
+            <p class="text-xs text-subtext">請重新整理頁面，或檢查網路連線。</p>
           </div>`;
       }
     }
 
-    // Render Products Grid
     function renderProducts() {
       const grid = document.getElementById('product-grid');
       const noProductsMsg = document.getElementById('no-products-msg');
@@ -585,7 +491,6 @@
                   ${p.description || ''}
                 </p>
                 
-                <!-- Spec Variant Selector -->
                 <div class="space-y-1.5 pt-1 text-xs">
                   <div class="flex items-center gap-1.5 text-subtext">
                     <span class="text-[10px] whitespace-nowrap">規格：</span>
@@ -617,9 +522,7 @@
       }).join('');
     }
 
-    // Event Listeners Setup
     function setupEventListeners() {
-      // Category Navigation
       document.querySelectorAll('.category-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           document.querySelectorAll('.category-btn').forEach(b => {
@@ -634,7 +537,6 @@
         });
       });
 
-      // Search Bar Toggle
       const searchBtn = document.getElementById('search-toggle-btn');
       const searchBar = document.getElementById('search-bar');
       const searchInput = document.getElementById('search-input');
@@ -649,13 +551,11 @@
         renderProducts();
       });
 
-      // Cart Drawer Overlay Click
       document.getElementById('cart-drawer-overlay').addEventListener('click', (e) => {
         if (e.target === document.getElementById('cart-drawer-overlay')) closeCartDrawer();
       });
     }
 
-    // Add Product with Spec to Cart
     function addToCartWithSpec(productId) {
       const p = products.find(item => String(item.id) === String(productId));
       const specSelect = document.getElementById(`spec-${productId}`);
@@ -688,9 +588,7 @@
       if (!item) return;
 
       item.quantity += delta;
-      if (item.quantity <= 0) {
-        cart = cart.filter(i => i.cartItemId !== cartItemId);
-      }
+      if (item.quantity <= 0) cart = cart.filter(i => i.cartItemId !== cartItemId);
 
       updateCartUI();
     }
@@ -700,7 +598,6 @@
       updateCartUI();
     }
 
-    // Update Cart Drawer UI
     function updateCartUI() {
       const container = document.getElementById('cart-items-container');
       const badge = document.getElementById('cart-count-badge');
@@ -750,7 +647,6 @@
         `).join('');
       }
 
-      // Free Shipping Bar
       const progressBar = document.getElementById('shipping-progress-bar');
       const statusLabel = document.getElementById('shipping-status-label');
       
@@ -771,7 +667,6 @@
       document.getElementById('cart-total').textContent = `NT$ ${grandTotal.toLocaleString()}`;
     }
 
-    // Step Switching
     function goToCartStep(step) {
       if (step === 2 && cart.length === 0) {
         showToast('請先將商品加入購物車才能前往結帳');
@@ -822,7 +717,6 @@
       }
     }
 
-    // Submit Order & Route to LINE
     function submitOrderToLine() {
       if (cart.length === 0) return;
 
@@ -832,19 +726,13 @@
       const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
       const custNotes = document.getElementById('cust-notes').value.trim();
 
-      let deliveryDetail = '';
-      if (shippingMethod === '宅配') {
-        deliveryDetail = document.getElementById('cust-address').value.trim();
-      } else {
-        deliveryDetail = document.getElementById('cust-store').value.trim();
-      }
+      let deliveryDetail = (shippingMethod === '宅配') ? document.getElementById('cust-address').value.trim() : document.getElementById('cust-store').value.trim();
 
       const orderNum = 'HN' + new Date().toISOString().slice(0,10).replace(/-/g,'') + Math.floor(1000 + Math.random() * 9000);
       const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
       const shippingFee = subtotal >= 1200 ? 0 : 60;
       const grandTotal = subtotal + shippingFee;
 
-      // Build Structured Order Text
       let msg = `【花言敘 Hua Narrative｜官方訂購單】\n`;
       msg += `訂單編號：#${orderNum}\n`;
       msg += `-----------------------------------\n`;
@@ -868,20 +756,14 @@
       msg += `辛苦客服專員，再請幫我確認現貨狀況，謝謝！`;
 
       generatedOrderText = msg;
-
-      // Copy Text To Clipboard
       copyTextToClipboard(msg);
 
-      // Set Up LINE Link
-      const lineIdSetting = localStorage.getItem('hua_line_id') || DEFAULT_LINE_ID;
-      const cleanLineId = lineIdSetting.replace('@', '');
+      const cleanLineId = LINE_OFFICIAL_ID.replace('@', '');
       const encodedMsg = encodeURIComponent(msg);
       
       const lineUrl = `https://line.me/R/oaMessage/@${cleanLineId}/?${encodedMsg}`;
-      const lineDirectLink = document.getElementById('line-direct-link');
-      lineDirectLink.href = lineUrl;
+      document.getElementById('line-direct-link').href = lineUrl;
 
-      // Update Modal Visual
       document.getElementById('success-order-id').textContent = `訂單編號：#${orderNum}`;
       document.getElementById('copied-order-preview').innerText = msg;
 
@@ -892,7 +774,6 @@
       }, 300);
     }
 
-    // Helper: Safe Copy to Clipboard
     function copyTextToClipboard(text) {
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(text);
@@ -911,20 +792,8 @@
     function copyOrderTextAgain() {
       if (generatedOrderText) {
         copyTextToClipboard(generatedOrderText);
-        showToast('訂單明細已再次複製到剪貼簿！');
+        showToast('訂單明細已再次複製！');
       }
-    }
-
-    // Modal Helpers
-    function openSettingsModal() {
-      loadConfig();
-      const modal = document.getElementById('settings-modal');
-      modal.classList.remove('opacity-0', 'pointer-events-none');
-    }
-
-    function closeSettingsModal() {
-      const modal = document.getElementById('settings-modal');
-      modal.classList.add('opacity-0', 'pointer-events-none');
     }
 
     function openCartDrawer() {
