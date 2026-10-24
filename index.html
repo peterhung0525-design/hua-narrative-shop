@@ -15,6 +15,9 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 
+<!-- ★ Google Identity Services（登入用） -->
+<script src="https://accounts.google.com/gsi/client" async></script>
+
 <script>
 tailwind.config = {
   theme: {
@@ -57,12 +60,28 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
       <h1 class="text-2xl sm:text-3xl font-semibold tracking-widest text-charcoal font-serifTC leading-tight">花言敘</h1>
       <span class="block text-[11px] font-garamond tracking-[0.25em] text-brand uppercase mt-0.5">Hua Narrative</span>
     </div>
-    <div class="relative">
-      <button id="cart-toggle-btn" onclick="openCartDrawer()" class="p-2 rounded-full hover:bg-brand-light text-charcoal transition-colors relative" title="購物車">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-        <span id="cart-count-badge" class="absolute top-1 right-1 bg-brand text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-sans font-medium transform scale-0 transition-transform">0</span>
-      </button>
+
+    <!-- ★ 右侧：用户区 + 购物车 -->
+    <div class="flex items-center gap-1.5 sm:gap-2">
+
+      <!-- 未登录：Google 登入按钮容器 -->
+      <div id="g_id_signin_container" class="flex items-center"></div>
+
+      <!-- 已登录：头像 + 名称 + 登出 -->
+      <div id="user-info" class="hidden items-center gap-1.5 sm:gap-2">
+        <img id="user-avatar" class="w-7 h-7 rounded-full border border-brand-border object-cover bg-brand-light" alt="使用者頭像">
+        <span id="user-name" class="hidden sm:inline text-xs text-charcoal max-w-[80px] truncate"></span>
+        <button onclick="handleSignOut()" class="text-[11px] text-subtext hover:text-charcoal underline underline-offset-2" title="登出">登出</button>
+      </div>
+
+      <div class="relative">
+        <button id="cart-toggle-btn" onclick="openCartDrawer()" class="p-2 rounded-full hover:bg-brand-light text-charcoal transition-colors relative" title="購物車">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span id="cart-count-badge" class="absolute top-1 right-1 bg-brand text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-sans font-medium transform scale-0 transition-transform">0</span>
+        </button>
+      </div>
     </div>
+
   </div>
 
   <div id="search-bar" class="hidden max-w-xl mx-auto px-4 pb-4 smooth-transition">
@@ -102,18 +121,13 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
 
 <div id="cart-drawer-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300">
   <div id="cart-drawer" class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-oatmeal shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
-
     <div class="p-4 bg-cardbg border-b border-brand-border flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <button id="cart-back-btn" onclick="goToCartStep(1)" class="hidden p-1 text-subtext hover:text-charcoal mr-1">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-        </button>
+        <button id="cart-back-btn" onclick="goToCartStep(1)" class="hidden p-1 text-subtext hover:text-charcoal mr-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
         <h3 id="drawer-title" class="text-base font-medium text-charcoal">您的購物清單</h3>
         <span id="cart-drawer-count" class="text-xs text-subtext font-light">(0 件)</span>
       </div>
-      <button onclick="closeCartDrawer()" class="p-1 rounded-full text-subtext hover:text-charcoal hover:bg-oatmeal transition-colors">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
+      <button onclick="closeCartDrawer()" class="p-1 rounded-full text-subtext hover:text-charcoal hover:bg-oatmeal transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/></svg></button>
     </div>
 
     <div class="bg-cardbg/50 border-b border-brand-border/60 py-2 px-6 flex justify-around text-xs text-subtext">
@@ -127,13 +141,9 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
           <span>滿 NT$ 1,200 免運費</span>
           <span id="shipping-status-label" class="font-medium">還差 NT$ 1,200</span>
         </div>
-        <div class="w-full bg-white rounded-full h-1.5 overflow-hidden border border-brand-border/40">
-          <div id="shipping-progress-bar" class="bg-brand h-full w-0 transition-all duration-500"></div>
-        </div>
+        <div class="w-full bg-white rounded-full h-1.5 overflow-hidden border border-brand-border/40"><div id="shipping-progress-bar" class="bg-brand h-full w-0 transition-all duration-500"></div></div>
       </div>
-
       <div id="cart-items-container" class="flex-grow overflow-y-auto p-4 space-y-4 divide-y divide-brand-border/50"></div>
-
       <div class="p-4 bg-cardbg border-t border-brand-border space-y-3">
         <div class="space-y-1 text-xs">
           <div class="flex justify-between text-subtext"><span>商品小計</span><span id="cart-subtotal" class="font-sans">NT$ 0</span></div>
@@ -149,7 +159,6 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
 
     <div id="cart-step-2" class="flex-grow flex flex-col overflow-y-auto p-4 space-y-4 hidden">
       <form id="checkout-form" onsubmit="event.preventDefault(); submitOrderToLine();" class="space-y-4 text-xs">
-
         <div class="bg-cardbg p-3.5 rounded border border-brand-border/60 space-y-3">
           <h4 class="font-medium text-charcoal text-xs border-b border-brand-border/40 pb-1.5">訂購人資訊</h4>
           <div class="space-y-2">
@@ -163,7 +172,6 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
             </div>
           </div>
         </div>
-
         <div class="bg-cardbg p-3.5 rounded border border-brand-border/60 space-y-3">
           <h4 class="font-medium text-charcoal text-xs border-b border-brand-border/40 pb-1.5">取貨方式</h4>
           <div class="space-y-2">
@@ -186,7 +194,6 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
             </div>
           </div>
         </div>
-
         <div class="bg-cardbg p-3.5 rounded border border-brand-border/60 space-y-3">
           <h4 class="font-medium text-charcoal text-xs border-b border-brand-border/40 pb-1.5">付款方式</h4>
           <div class="flex gap-4 flex-wrap">
@@ -194,12 +201,10 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
             <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="payment-method" value="銀行轉帳" class="accent-brand"><span>銀行轉帳</span></label>
           </div>
         </div>
-
         <div class="bg-cardbg p-3.5 rounded border border-brand-border/60 space-y-2">
           <label class="block text-subtext font-medium text-xs" for="cust-notes">訂單備註 (選填)</label>
           <textarea id="cust-notes" rows="2" placeholder="如有特殊的尺寸確認或需求請在此留言..." class="w-full p-2 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand resize-none"></textarea>
         </div>
-
         <div class="pt-2 space-y-2">
           <button type="submit" class="w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded text-xs tracking-widest font-medium transition-all shadow flex items-center justify-center gap-2">
             <i class="fa-brands fa-line text-lg"></i>送出訂單並前往 LINE 發送
@@ -256,30 +261,166 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
 const API_URL = "https://script.google.com/macros/s/AKfycbyMjjG23l41ANx-jQLQCxh-0yDquqicdrVsf-HhtNSb33TZc3XRkYTM_CJMYNGx93GR/exec";
 const LINE_OFFICIAL_ID = "@229ttqiy";
 
+// ★ Google 登入設定（步驟一取得的用戶端 ID）
+const GOOGLE_CLIENT_ID = "你的用戶端ID.apps.googleusercontent.com";
+const ID_TOKEN_KEY = "hua_narrative_id_token";
+
 let products = [];
 let cart = [];
 let activeCategory = 'All';
 let searchQuery = '';
 let currentStep = 1;
 let generatedOrderText = '';
+let googleUser = null;
 
+// ★ DOMContentLoaded：改為先初始化 Google 登入，由它決定是否載入商品
 document.addEventListener('DOMContentLoaded', function() {
   setupEventListeners();
-  fetchProducts();
   toggleShippingFields('store');
   updateCartUI();
+  initGoogleSignIn();
 });
+
+/* =========================================================
+   ★ Google 登入相關函式（步驟二）
+   ========================================================= */
+
+let gisPollCount = 0;
+function initGoogleSignIn() {
+  // GIS script 是 async 載入，這裡輪詢等待它可用
+  if (typeof google === 'undefined' || !google.accounts || !google.accounts.id) {
+    gisPollCount++;
+    if (gisPollCount > 100) {   // 約 20 秒超時
+      console.error('Google 登入程式庫載入失敗（可能是網路或 CSP 問題）');
+      return;
+    }
+    setTimeout(initGoogleSignIn, 200);
+    return;
+  }
+
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleCredentialResponse,
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+
+  // 檢查 localStorage 是否有未過期的 Token
+  const savedToken = localStorage.getItem(ID_TOKEN_KEY);
+  if (savedToken && !isTokenExpired(savedToken)) {
+    try {
+      const payload = decodeJwtPayload(savedToken);
+      googleUser = payload;
+      showUserInfo(payload);
+      fetchProducts();
+      return;
+    } catch (e) {
+      localStorage.removeItem(ID_TOKEN_KEY);
+    }
+  }
+
+  // 未登入或已過期
+  localStorage.removeItem(ID_TOKEN_KEY);
+  showSignInButton();
+  fetchProducts();  // 會走「請先登入」分支
+}
+
+function handleCredentialResponse(response) {
+  if (!response.credential) return;
+  localStorage.setItem(ID_TOKEN_KEY, response.credential);
+  try {
+    const payload = decodeJwtPayload(response.credential);
+    googleUser = payload;
+    showUserInfo(payload);
+    showToast('登入成功，歡迎 ' + (payload.name || payload.email));
+    fetchProducts();   // 登入後重新載入商品
+  } catch (e) {
+    console.error('解碼登入憑證失敗', e);
+    showToast('登入資料異常，請重新登入');
+    localStorage.removeItem(ID_TOKEN_KEY);
+  }
+}
+
+function showUserInfo(payload) {
+  document.getElementById('g_id_signin_container').classList.add('hidden');
+  const info = document.getElementById('user-info');
+  info.classList.remove('hidden');
+  info.classList.add('flex');
+  document.getElementById('user-avatar').src =
+    payload.picture || 'https://placehold.co/40x40/F1ECE6/8C7A6B?text=U';
+  document.getElementById('user-name').textContent =
+    payload.name || payload.email || '使用者';
+}
+
+function showSignInButton() {
+  const info = document.getElementById('user-info');
+  info.classList.add('hidden');
+  info.classList.remove('flex');
+
+  const container = document.getElementById('g_id_signin_container');
+  container.classList.remove('hidden');
+
+  if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+    const isMobile = window.innerWidth < 640;
+    google.accounts.id.renderButton(container, {
+      theme: 'outline',
+      size: 'medium',
+      shape: isMobile ? 'circle' : 'pill',
+      type: isMobile ? 'icon' : 'standard',
+      text: 'signin_with',
+      locale: 'zh-TW'
+    });
+  }
+}
+
+function handleSignOut() {
+  if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+    google.accounts.id.disableAutoSelect();
+  }
+  localStorage.removeItem(ID_TOKEN_KEY);
+  googleUser = null;
+  document.getElementById('user-avatar').src = '';
+  document.getElementById('user-name').textContent = '';
+  showSignInButton();
+  showToast('已登出');
+  fetchProducts();   // 顯示「請先登入」狀態
+}
+
+function decodeJwtPayload(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const json = decodeURIComponent(
+    atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join('')
+  );
+  return JSON.parse(json);
+}
+
+function getIdToken() {
+  return localStorage.getItem(ID_TOKEN_KEY) || '';
+}
+
+function isLoggedIn() {
+  const t = getIdToken();
+  return !!t && !isTokenExpired(t);
+}
+
+function isTokenExpired(token) {
+  if (!token) return true;
+  try {
+    const payload = decodeJwtPayload(token);
+    return !payload.exp || payload.exp * 1000 < Date.now();
+  } catch (e) {
+    return true;
+  }
+}
 
 /* ========== 多圖工具函式 ========== */
 function parseProductImages(raw) {
   const FALLBACK = 'https://placehold.co/400x533/F1ECE6/8C7A6B?text=Hua+Narrative';
   if (!raw) return [FALLBACK];
-
-  let list = String(raw)
-    .split(/[|\n\r]+/)
-    .map(function (s) { return s.trim(); })
-    .filter(Boolean);
-
+  let list = String(raw).split(/[|\n\r]+/).map(function (s) { return s.trim(); }).filter(Boolean);
   if (list.length === 1 && list[0].indexOf(',') > -1) {
     const byComma = list[0].split(',').map(function (s) { return s.trim(); }).filter(Boolean);
     if (byComma.length > 1 && byComma.every(function (u) { return /^https?:\/\//i.test(u); })) {
@@ -295,16 +436,13 @@ function setGalleryIndex(gallery, index) {
   const total = Number(gallery.dataset.total) || 1;
   if (index < 0) index = 0;
   if (index >= total) index = total - 1;
-
   gallery.dataset.index = index;
   if (track) track.style.transform = 'translateX(-' + (index * 100) + '%)';
-
   gallery.querySelectorAll('.gallery-dot').forEach(function (dot, i) {
     const active = i === index;
     dot.style.width = active ? '14px' : '6px';
     dot.style.background = active ? '#8C7A6B' : 'rgba(255,255,255,.75)';
   });
-
   const counter = gallery.querySelector('.gallery-counter');
   if (counter) counter.textContent = (index + 1) + '/' + total;
 }
@@ -326,23 +464,17 @@ function bindGallerySwipe() {
   document.querySelectorAll('.product-gallery').forEach(function (gallery) {
     if (gallery.dataset.swipeBound === '1') return;
     gallery.dataset.swipeBound = '1';
-
     let startX = 0, startY = 0, isSwiping = false;
-
     gallery.addEventListener('touchstart', function (e) {
       if (e.touches.length !== 1) return;
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-      isSwiping = false;
+      startX = e.touches[0].clientX; startY = e.touches[0].clientY; isSwiping = false;
     }, { passive: true });
-
     gallery.addEventListener('touchmove', function (e) {
       if (e.touches.length !== 1) return;
       const dx = e.touches[0].clientX - startX;
       const dy = e.touches[0].clientY - startY;
       if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10) isSwiping = true;
     }, { passive: true });
-
     gallery.addEventListener('touchend', function (e) {
       if (!isSwiping) return;
       const dx = e.changedTouches[0].clientX - startX;
@@ -355,53 +487,95 @@ function bindGallerySwipe() {
 /* ========== 預設商品（API 失效時使用） ========== */
 function getFallbackProducts() {
   return [
-    {
-      id: '1', title: '「敘白」極簡天然絲棉襯衫', category: 'Tops', price: 1280,
+    { id: '1', title: '「敘白」極簡天然絲棉襯衫', category: 'Tops', price: 1280,
       description: '嚴選親膚天絲與亞麻混紡，輕盈透氣，呈現溫柔自然垂墜感。',
       imageUrl: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?q=80&w=600&auto=format&fit=crop|https://images.unsplash.com/photo-1551163943-3f6a855d1153?q=80&w=600&auto=format&fit=crop|https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80&w=600&auto=format&fit=crop',
-      variants: 'S (奶油白), M (奶油白), L (奶油白), S (燕麥色), M (燕麥色)'
-    },
-    {
-      id: '2', title: '「微光」高腰壓褶垂墜長裙', category: 'Dresses', price: 1580,
+      variants: 'S (奶油白), M (奶油白), L (奶油白), S (燕麥色), M (燕麥色)' },
+    { id: '2', title: '「微光」高腰壓褶垂墜長裙', category: 'Dresses', price: 1580,
       description: '微光澤感質感面料，修飾身型剪裁，動靜之間展現簡約優雅。',
       imageUrl: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80&w=600&auto=format&fit=crop|https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=600&auto=format&fit=crop',
-      variants: 'F (莫蘭迪綠), F (杏褐色), F (炭灰)'
-    },
-    {
-      id: '3', title: '「沉香」雙面手工羊毛外套', category: 'Outerwear', price: 2680,
+      variants: 'F (莫蘭迪綠), F (杏褐色), F (炭灰)' },
+    { id: '3', title: '「沉香」雙面手工羊毛外套', category: 'Outerwear', price: 2680,
       description: '100% 梳棉質感布料，觸感溫潤細緻，秋冬必備低調奢華單品。',
       imageUrl: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=600&auto=format&fit=crop|https://images.unsplash.com/photo-1544022613-e87ca75a784a?q=80&w=600&auto=format&fit=crop',
-      variants: 'S (大地棕), M (大地棕), L (經典黑)'
-    },
-    {
-      id: '4', title: '「靜晨」法式排扣親膚連身裙', category: 'Dresses', price: 1880,
+      variants: 'S (大地棕), M (大地棕), L (經典黑)' },
+    { id: '4', title: '「靜晨」法式排扣親膚連身裙', category: 'Dresses', price: 1880,
       description: '細緻排扣設計，收腰剪裁襯托典雅氣質，日常約會皆合宜。',
       imageUrl: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=600&auto=format&fit=crop|https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=600&auto=format&fit=crop',
-      variants: 'S (燕麥白), M (燕麥白), L (霧灰藍)'
-    }
+      variants: 'S (燕麥白), M (燕麥白), L (霧灰藍)' }
   ];
 }
 
-/* ========== 取得商品 ========== */
+/* =========================================================
+   ★ 取得商品（攜帶 ID Token）
+   ========================================================= */
 async function fetchProducts() {
   const grid = document.getElementById('product-grid');
+  const noProductsMsg = document.getElementById('no-products-msg');
+
+  const idToken = getIdToken();
+  if (!idToken || isTokenExpired(idToken)) {
+    localStorage.removeItem(ID_TOKEN_KEY);
+    noProductsMsg.classList.add('hidden');
+    grid.innerHTML = `
+      <div class="col-span-full text-center py-16 space-y-3">
+        <svg class="w-12 h-12 text-brand-border mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+        <p class="text-subtext text-sm">請點擊右上角按鈕使用 Google 登入後查看商品</p>
+      </div>`;
+    return;
+  }
+
   grid.innerHTML = `<div class="col-span-full text-center py-16 space-y-3"><i class="fa-solid fa-spinner fa-spin text-3xl text-brand"></i><p class="text-subtext text-sm">正在載入「花言敘」選品...</p></div>`;
+
   try {
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error('商品 API 回應異常');
-    const data = await res.json();
+    const sep = API_URL.indexOf('?') > -1 ? '&' : '?';
+    const url = API_URL + sep + 'id_token=' + encodeURIComponent(idToken);
+    const res = await fetch(url);
+
+    // GAS 回應可能是 JSON，也可能是錯誤 HTML，先讀文字再解析
+    const text = await res.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (parseErr) {
+      throw new Error('商品 API 回應非 JSON');
+    }
+
+    // GAS 驗證失敗會回傳 { error: ... }
+    if (data && data.error) {
+      localStorage.removeItem(ID_TOKEN_KEY);
+      showSignInButton();
+      noProductsMsg.classList.add('hidden');
+      grid.innerHTML = `
+        <div class="col-span-full text-center py-16 space-y-3">
+          <p class="text-subtext text-sm">登入狀態已失效（${data.error}），請重新使用 Google 登入</p>
+        </div>`;
+      return;
+    }
+
     products = Array.isArray(data) && data.length > 0 ? data : getFallbackProducts();
+    renderProducts();
+
   } catch (err) {
     console.warn('商品載入失敗，改用預設商品：', err);
+    // 網路錯誤時用預設商品，避免完全空白
     products = getFallbackProducts();
+    renderProducts();
   }
-  renderProducts();
 }
 
 /* ========== 渲染商品（多圖版本） ========== */
 function renderProducts() {
   const grid = document.getElementById('product-grid');
   const noProductsMsg = document.getElementById('no-products-msg');
+
+  // 未登入不渲染商品（避免覆蓋登入提示）
+  if (!isLoggedIn()) {
+    noProductsMsg.classList.add('hidden');
+    return;
+  }
 
   const filtered = products.filter(function (p) {
     const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
@@ -423,7 +597,6 @@ function renderProducts() {
       ? p.variants.split(',').map(function (v) { return v.trim(); })
       : ['單一規格'];
 
-    /* ---- 多圖處理 ---- */
     const images = parseProductImages(p.imageUrl);
     const hasMultiple = images.length > 1;
 
@@ -441,12 +614,10 @@ function renderProducts() {
     }).join('') : '';
 
     const galleryControls = hasMultiple ? (
-      '<button type="button" onclick="changeProductImage(this, -1)" aria-label="上一張" ' +
-        'class="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-charcoal shadow flex items-center justify-center transition-colors">' +
+      '<button type="button" onclick="changeProductImage(this, -1)" aria-label="上一張" class="absolute left-1 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-charcoal shadow flex items-center justify-center transition-colors">' +
         '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/></svg>' +
       '</button>' +
-      '<button type="button" onclick="changeProductImage(this, 1)" aria-label="下一張" ' +
-        'class="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-charcoal shadow flex items-center justify-center transition-colors">' +
+      '<button type="button" onclick="changeProductImage(this, 1)" aria-label="下一張" class="absolute right-1 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-charcoal shadow flex items-center justify-center transition-colors">' +
         '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/></svg>' +
       '</button>' +
       '<div class="absolute bottom-2 left-0 right-0 z-10 flex items-center justify-center gap-1 pointer-events-none">' + dots + '</div>' +
@@ -456,18 +627,13 @@ function renderProducts() {
     return `
     <div class="bg-cardbg rounded-lg overflow-hidden border border-brand-border/60 hover:shadow-md smooth-transition flex flex-col justify-between group">
       <div>
-        <div class="product-gallery relative aspect-[3/4] overflow-hidden bg-oatmeal"
-             data-index="0" data-total="${images.length}">
-          <div class="gallery-track flex h-full w-full smooth-transition duration-300 ease-out"
-               style="transform: translateX(0)">
-            ${slides}
-          </div>
+        <div class="product-gallery relative aspect-[3/4] overflow-hidden bg-oatmeal" data-index="0" data-total="${images.length}">
+          <div class="gallery-track flex h-full w-full smooth-transition duration-300 ease-out" style="transform: translateX(0)">${slides}</div>
           ${galleryControls}
           <div class="absolute top-2 left-2 z-10">
             <span class="bg-cardbg/90 backdrop-blur-sm text-brand-dark text-[10px] px-2 py-0.5 rounded tracking-wider shadow-sm border border-brand-border/40">親膚選品</span>
           </div>
         </div>
-
         <div class="p-3 sm:p-4 space-y-2">
           <h3 class="text-sm font-medium text-charcoal group-hover:text-brand transition-colors line-clamp-1">${p.title}</h3>
           <p class="text-xs text-subtext line-clamp-2 leading-relaxed font-light hidden sm:block">${p.description || ''}</p>
@@ -482,10 +648,8 @@ function renderProducts() {
           <div class="text-sm font-sans font-semibold text-brand pt-1">NT$ ${Number(p.price).toLocaleString()}</div>
         </div>
       </div>
-
       <div class="p-3 sm:p-4 pt-0">
-        <button onclick="addToCartWithSpec('${String(p.id).replace(/'/g, "\\'")}')"
-          class="w-full py-2 bg-oatmeal hover:bg-brand hover:text-white border border-brand-border text-charcoal rounded text-xs tracking-widest smooth-transition flex items-center justify-center gap-1.5 cursor-pointer">
+        <button onclick="addToCartWithSpec('${String(p.id).replace(/'/g, "\\'")}')" class="w-full py-2 bg-oatmeal hover:bg-brand hover:text-white border border-brand-border text-charcoal rounded text-xs tracking-widest smooth-transition flex items-center justify-center gap-1.5 cursor-pointer">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>加入購物車
         </button>
       </div>
@@ -530,8 +694,12 @@ function setupEventListeners() {
   });
 }
 
-/* ========== 購物車：加入商品（多圖版本，固定使用第一張） ========== */
+/* ========== 購物車：加入商品 ========== */
 function addToCartWithSpec(productId) {
+  if (!isLoggedIn()) {
+    showToast('請先使用 Google 登入');
+    return;
+  }
   const p = products.find(function (item) { return String(item.id) === String(productId); });
   if (!p) return;
 
@@ -544,16 +712,11 @@ function addToCartWithSpec(productId) {
     existing.quantity += 1;
   } else {
     cart.push({
-      cartItemId,
-      id: p.id,
-      title: p.title,
-      price: Number(p.price),
+      cartItemId, id: p.id, title: p.title, price: Number(p.price),
       image: parseProductImages(p.imageUrl)[0],
-      spec: selectedSpec,
-      quantity: 1
+      spec: selectedSpec, quantity: 1
     });
   }
-
   updateCartUI();
   showToast(`已加入：${p.title} (${selectedSpec})`);
   openCartDrawer();
@@ -599,7 +762,6 @@ function updateCartUI() {
 
   const progressBar = document.getElementById('shipping-progress-bar');
   const statusLabel = document.getElementById('shipping-status-label');
-
   if (subtotal === 0) {
     progressBar.style.width = '0%';
     statusLabel.textContent = `還差 NT$ ${freeShippingThreshold.toLocaleString()}`;
@@ -610,7 +772,6 @@ function updateCartUI() {
     progressBar.style.width = `${Math.min(subtotal / freeShippingThreshold * 100, 100)}%`;
     statusLabel.textContent = `還差 NT$ ${(freeShippingThreshold - subtotal).toLocaleString()}`;
   }
-
   document.getElementById('cart-subtotal').textContent = `NT$ ${subtotal.toLocaleString()}`;
   document.getElementById('cart-shipping-fee').textContent = shippingFee === 0 ? 'NT$ 0 (免運)' : `NT$ ${shippingFee}`;
   document.getElementById('cart-total').textContent = `NT$ ${grandTotal.toLocaleString()}`;
@@ -622,7 +783,6 @@ function goToCartStep(step) {
   const step1 = document.getElementById('cart-step-1'), step2 = document.getElementById('cart-step-2');
   const backBtn = document.getElementById('cart-back-btn'), title = document.getElementById('drawer-title');
   const ind1 = document.getElementById('step-indicator-1'), ind2 = document.getElementById('step-indicator-2');
-
   if (step === 1) {
     step1.classList.remove('hidden'); step2.classList.add('hidden');
     backBtn.classList.add('hidden'); title.textContent = '您的購物清單';
@@ -639,7 +799,6 @@ function goToCartStep(step) {
 function toggleShippingFields(type) {
   const storeField = document.getElementById('store-field'), addressField = document.getElementById('address-field');
   const storeInput = document.getElementById('cust-store'), addressInput = document.getElementById('cust-address');
-
   if (type === 'store') {
     storeField.classList.remove('hidden'); addressField.classList.add('hidden');
     storeInput.required = true; addressInput.required = false;
@@ -655,8 +814,20 @@ function buildLineUrl(message) {
   return `https://line.me/R/oaMessage/${encodeURIComponent(lineId)}/?${encodeURIComponent(message)}`;
 }
 
+/* =========================================================
+   ★ 送出訂單（攜帶 ID Token）
+   ========================================================= */
 async function submitOrderToLine() {
   if (cart.length === 0) { showToast('購物車內沒有商品！'); return; }
+
+  const idToken = getIdToken();
+  if (!idToken || isTokenExpired(idToken)) {
+    showToast('登入已過期，請重新使用 Google 登入');
+    localStorage.removeItem(ID_TOKEN_KEY);
+    showSignInButton();
+    return;
+  }
+
   const form = document.getElementById('checkout-form');
   if (!form.reportValidity()) return;
 
@@ -705,19 +876,20 @@ async function submitOrderToLine() {
     const lineUrl = buildLineUrl(msg);
     const lineDirectBtn = document.getElementById('line-direct-link');
     if (!lineDirectBtn) throw new Error('找不到 LINE 訂單按鈕');
-
     lineDirectBtn.href = lineUrl;
     lineDirectBtn.target = '_self';
     lineDirectBtn.rel = 'noopener noreferrer';
     document.getElementById('success-order-id').textContent = '訂單編號：#' + orderNum;
     document.getElementById('copied-order-preview').innerText = msg;
 
+    // ★ GAS 同步：帶上 id_token
     if (API_URL) {
       fetch(API_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
+          id_token: idToken,
           orderNum, custName, custPhone, shippingMethod, deliveryDetail,
           paymentMethod, custNotes, items: cart, subtotal, shippingFee,
           grandTotal, createdAt: new Date().toISOString()
@@ -794,12 +966,10 @@ function resetFilters() {
   activeCategory = 'All';
   searchQuery = '';
   document.getElementById('search-input').value = '';
-
   document.querySelectorAll('.category-btn').forEach(function (b) {
     b.classList.remove('active', 'bg-brand', 'text-white', 'border-brand');
     b.classList.add('bg-white', 'text-subtext', 'border-brand-border');
   });
-
   const allBtn = document.querySelector('[data-category="All"]');
   if (allBtn) {
     allBtn.classList.add('active', 'bg-brand', 'text-white', 'border-brand');
