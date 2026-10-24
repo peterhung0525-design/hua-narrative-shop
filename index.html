@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MORA | 法式質感服飾</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #FDFBF7; color: #4A4238; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .bg-warm-primary { background-color: #9E8978; }
+    .bg-warm-light { background-color: #F4EFEB; }
+    .border-warm { border-color: #E6DFD5; }
+    .text-warm-dark { color: #362F27; }
+    .text-warm-accent { color: #8C735D; }
+  </style>
+</head>
+<body class="pb-24">
+
+  <!-- 頂部導覽列 -->
+  <header class="sticky top-0 z-40 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-warm px-4 py-3 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <button id="btn-settings" onclick="openSettingsModal()" class="flex items-center gap-1.5 text-warm-accent px-3 py-1.5 bg-warm-light hover:bg-amber-100 rounded-full transition font-bold text-xs">
+        <i class="fa-solid fa-gear text-base"></i>
+        <span>設定 API</span>
+      </button>
+      <h1 class="text-2xl font-serif tracking-widest font-bold text-warm-dark">MORA</h1>
+    </div>
+    <div class="relative">
+      <button onclick="toggleCart()" class="p-2 text-warm-dark relative">
+        <i class="fa-solid fa-bag-shopping text-2xl"></i>
+        <span id="cart-count" class="absolute -top-1 -right-1 bg-amber-700 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold hidden">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 主區塊 -->
+  <main class="max-w-4xl mx-auto px-4 pt-6">
+    <!-- 分類標籤 -->
+    <div class="flex gap-2 overflow-x-auto pb-4 scrollbar-none text-sm" id="category-bar">
+      <button onclick="filterCategory('All')" class="cat-btn bg-warm-primary text-white px-4 py-1.5 rounded-full whitespace-nowrap shadow-sm">全部商品</button>
+      <button onclick="filterCategory('Tops')" class="cat-btn bg-warm-light text-warm-dark px-4 py-1.5 rounded-full whitespace-nowrap">上衣 Tops</button>
+      <button onclick="filterCategory('Dresses')" class="cat-btn bg-warm-light text-warm-dark px-4 py-1.5 rounded-full whitespace-nowrap">洋裝 Dresses</button>
+      <button onclick="filterCategory('Outerwear')" class="cat-btn bg-warm-light text-warm-dark px-4 py-1.5 rounded-full whitespace-nowrap">外套 Outerwear</button>
+      <button onclick="filterCategory('Accessories')" class="cat-btn bg-warm-light text-warm-dark px-4 py-1.5 rounded-full whitespace-nowrap">配件 Accessories</button>
+    </div>
+
+    <!-- 商品列表區塊 -->
+    <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+      <div class="col-span-full text-center py-12 text-gray-400">
+        <i class="fa-solid fa-spinner fa-spin text-3xl mb-3 text-amber-700"></i>
+        <p id="loading-status">尚未設定 API 網址</p>
+        <button onclick="openSettingsModal()" class="mt-4 px-4 py-2 bg-amber-800 text-white font-bold text-xs rounded-lg shadow hover:bg-amber-900 transition">
+          👉 點此貼上 Google API 網址
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ⚙️ 系統設定彈出視窗 -->
+  <div id="settings-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-warm">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold text-warm-dark flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-warm-accent"></i> 網站系統設定
+        </h3>
+        <button onclick="closeSettingsModal()" class="text-gray-400 hover:text-gray-600 p-1"><i class="fa-solid fa-xmark text-2xl"></i></button>
+      </div>
+      <div class="space-y-4 text-sm">
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">Google Sheet API 網址</label>
+          <input type="text" id="cfg-api-url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full p-3 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-700 outline-none">
+          <p class="text-[11px] text-gray-400 mt-1">貼上部署好的 Web App 網址</p>
+        </div>
+        <div>
+          <label class="block font-bold text-gray-700 mb-1">LINE 官方帳號 ID</label>
+          <input type="text" id="cfg-line-id" placeholder="@flower_shop" class="w-full p-3 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-700 outline-none">
+          <p class="text-[11px] text-gray-400 mt-1">含 @ 的 LINE 帳號 ID</p>
+        </div>
+        <button onclick="saveSettings()" class="w-full bg-warm-primary text-white py-3 rounded-xl font-bold hover:opacity-90 transition shadow-md">
+          儲存並測試同步
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 購物車滑出選單 -->
+  <div id="cart-drawer" class="fixed inset-y-0 right-0 max-w-md w-full bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="p-4 border-b border-warm flex justify-between items-center bg-[#FDFBF7]">
+      <h2 class="font-serif font-bold text-lg text-warm-dark">購物車明細</h2>
+      <button onclick="toggleCart()" class="p-2 text-gray-500"><i class="fa-solid fa-xmark text-xl"></i></button>
+    </div>
+    <div id="cart-items" class="flex-1 overflow-y-auto p-4 space-y-4"></div>
+    <div class="p-4 border-t border-warm bg-[#FDFBF7] space-y-3">
+      <div class="flex justify-between font-bold text-warm-dark">
+        <span>總金額</span>
+        <span id="cart-total" class="text-amber-800 text-lg">$0</span>
+      </div>
+      <button onclick="checkoutToLine()" class="w-full bg-emerald-600 text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-emerald-700 transition shadow-lg">
+        <i class="fa-brands fa-line text-2xl"></i> 前往 LINE 結帳發送訂單
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let products = [];
+    let cart = [];
+    let currentCategory = 'All';
+
+    const DEFAULT_LINE = "@mora_studio";
+
+    window.onload = () => {
+      loadConfig();
+      const apiUrl = localStorage.getItem('mora_api_url');
+      if (apiUrl) {
+        fetchProducts(apiUrl);
+      }
+    };
+
+    function loadConfig() {
+      document.getElementById('cfg-api-url').value = localStorage.getItem('mora_api_url') || '';
+      document.getElementById('cfg-line-id').value = localStorage.getItem('mora_line_id') || DEFAULT_LINE;
+    }
+
+    function saveSettings() {
+      const url = document.getElementById('cfg-api-url').value.trim();
+      const lineId = document.getElementById('cfg-line-id').value.trim();
+      
+      if (!url) {
+        alert('請輸入 Google Sheet API 網址！');
+        return;
+      }
+
+      localStorage.setItem('mora_api_url', url);
+      localStorage.setItem('mora_line_id', lineId);
+      closeSettingsModal();
+      fetchProducts(url);
+    }
+
+    function openSettingsModal() {
+      loadConfig();
+      document.getElementById('settings-modal').classList.remove('hidden');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settings-modal').classList.add('hidden');
+    }
+
+    async function fetchProducts(apiUrl) {
+      const grid = document.getElementById('product-grid');
+      grid.innerHTML = `
+        <div class="col-span-full text-center py-12 text-gray-400">
+          <i class="fa-solid fa-spinner fa-spin text-3xl mb-3 text-amber-700"></i>
+          <p>資料讀取中...</p>
+        </div>`;
+
+      try {
+        const res = await fetch(apiUrl);
+        products = await res.json();
+        renderProducts();
+      } catch (err) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-12 text-red-500">
+            <p class="font-bold mb-2">連線失敗！</p>
+            <p class="text-xs text-gray-500 mb-4">請確認 API 網址是否正確貼上。</p>
+            <button onclick="openSettingsModal()" class="px-4 py-2 bg-amber-800 text-white text-xs rounded-lg shadow">
+              重新設定 API 網址
+            </button>
+          </div>`;
+      }
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById('product-grid');
+      const list = currentCategory === 'All' ? products : products.filter(p => p.category === currentCategory);
+      
+      if (!list || list.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400">目前此分類尚無商品</div>`;
+        return;
+      }
+
+      grid.innerHTML = list.map(p => {
+        const variants = p.variants ? p.variants.split(',').map(v => v.trim()) : ['單一尺寸'];
+        return `
+          <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-warm flex flex-col justify-between">
+            <div>
+              <img src="${p.imageUrl}" class="w-full h-48 object-cover" alt="${p.title}" onerror="this.src='https://via.placeholder.com/300x400?text=No+Image'">
+              <div class="p-3">
+                <h3 class="font-bold text-sm text-warm-dark line-clamp-1">${p.title}</h3>
+                <p class="text-xs text-gray-400 mt-0.5 line-clamp-1">${p.description || ''}</p>
+                <div class="text-amber-800 font-bold mt-2">$${p.price}</div>
+              </div>
+            </div>
+            <div class="p-3 pt-0">
+              <select id="var-${p.id}" class="w-full text-xs p-1.5 border border-gray-200 rounded mb-2 bg-gray-50 outline-none">
+                ${variants.map(v => `<option value="${v}">${v}</option>`).join('')}
+              </select>
+              <button onclick="addToCart('${p.id}')" class="w-full bg-warm-light text-warm-dark text-xs py-2 rounded-lg font-bold hover:bg-warm-primary hover:text-white transition">
+                加入購物車
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterCategory(cat) {
+      currentCategory = cat;
+      renderProducts();
+    }
+
+    function addToCart(pId) {
+      const p = products.find(item => item.id === pId);
+      const variant = document.getElementById(`var-${pId}`).value;
+      const key = `${pId}_${variant}`;
+      
+      const existing = cart.find(item => item.key === key);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ key, id: p.id, title: p.title, price: p.price, variant, qty: 1 });
+      }
+      updateCartUI();
+      toggleCart(true);
+    }
+
+    function updateCartUI() {
+      const countEl = document.getElementById('cart-count');
+      const itemsEl = document.getElementById('cart-items');
+      const totalEl = document.getElementById('cart-total');
+      
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      
+      countEl.innerText = totalQty;
+      countEl.classList.toggle('hidden', totalQty === 0);
+      totalEl.innerText = `$${totalPrice}`;
+
+      itemsEl.innerHTML = cart.map((item, idx) => `
+        <div class="flex justify-between items-center border-b border-gray-100 pb-3">
+          <div>
+            <div class="font-bold text-sm text-warm-dark">${item.title}</div>
+            <div class="text-xs text-gray-400">規格：${item.variant}</div>
+            <div class="text-xs font-bold text-amber-800 mt-1">$${item.price} x ${item.qty}</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="changeQty(${idx}, -1)" class="w-6 h-6 bg-gray-100 text-gray-600 rounded flex items-center justify-center font-bold">-</button>
+            <span class="text-xs font-bold">${item.qty}</span>
+            <button onclick="changeQty(${idx}, 1)" class="w-6 h-6 bg-gray-100 text-gray-600 rounded flex items-center justify-center font-bold">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function changeQty(idx, delta) {
+      cart[idx].qty += delta;
+      if (cart[idx].qty <= 0) cart.splice(idx, 1);
+      updateCartUI();
+    }
+
+    function toggleCart(forceOpen = false) {
+      const drawer = document.getElementById('cart-drawer');
+      if (forceOpen) {
+        drawer.classList.remove('translate-x-full');
+      } else {
+        drawer.classList.toggle('translate-x-full');
+      }
+    }
+
+    function checkoutToLine() {
+      if (cart.length === 0) return alert('購物車是空的！');
+      
+      const lineId = (localStorage.getItem('mora_line_id') || DEFAULT_LINE).replace('@', '');
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      
+      let msg = "你好！我想購買以下商品：\n------------------\n";
+      cart.forEach(item => {
+        msg += `• ${item.title} (${item.variant}) x${item.qty} - $${item.price * item.qty}\n`;
+      });
+      msg += `------------------\n總金額：$${totalPrice} 元\n\n請問目前有現貨嗎？`;
+
+      const lineUrl = `https://line.me/R/oaMessage/@${lineId}/?${encodeURIComponent(msg)}`;
+      window.location.href = lineUrl;
+    }
+  </script>
+</body>
+</html>
