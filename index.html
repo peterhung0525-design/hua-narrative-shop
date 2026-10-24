@@ -3,48 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- 網頁標題與社群預覽 -->
   <title>花言敘 Hua Narrative｜用服飾講述你的日常故事</title>
   <meta property="og:title" content="花言敘 Hua Narrative｜用服飾講述你的日常故事">
   <meta property="og:description" content="嚴選高品質親膚布料與俐落剪裁，平價也能穿出低調奢華質感。">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="花言敘 Hua Narrative">
-  
-  <!-- Google Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            oatmeal: '#F9F8F6',
-            cardbg: '#FFFFFF',
-            brand: {
-              DEFAULT: '#8C7A6B',
-              dark: '#6E5E52',
-              light: '#F1ECE6',
-              accent: '#B88E73',
-              border: '#E5DFD8'
-            },
-            charcoal: '#2C2A29',
-            subtext: '#7A7571'
+            oatmeal: '#F9F8F6', cardbg: '#FFFFFF',
+            brand: { DEFAULT: '#8C7A6B', dark: '#6E5E52', light: '#F1ECE6', accent: '#B88E73', border: '#E5DFD8' },
+            charcoal: '#2C2A29', subtext: '#7A7571'
           },
-          fontFamily: {
-            serifTC: ['"Noto Serif TC"', 'serif'],
-            garamond: ['"Cormorant Garamond"', 'serif']
-          }
+          fontFamily: { serifTC: ['"Noto Serif TC"', 'serif'], garamond: ['"Cormorant Garamond"', 'serif'] }
         }
       }
     }
   </script>
-
   <style>
     body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', serif; -webkit-font-smoothing: antialiased; }
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -57,358 +39,137 @@
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-brand-light selection:text-brand-dark">
-
-  <!-- Top Announcement Bar -->
   <div class="bg-brand-light border-b border-brand-border py-2 px-4 text-center text-xs text-brand-dark tracking-widest font-light flex justify-center items-center gap-2 sm:gap-6">
-    <span>✦ 嚴選親膚布料</span>
-    <span class="hidden sm:inline">|</span>
-    <span>✦ 100% 實品拍攝</span>
-    <span class="hidden sm:inline">|</span>
-    <span>✦ 滿 NT$ 1,200 享免運優惠</span>
+    <span>✦ 嚴選親膚布料</span><span class="hidden sm:inline">|</span><span>✦ 100% 實品拍攝</span><span class="hidden sm:inline">|</span><span>✦ 滿 NT$ 1,200 享免運優惠</span>
   </div>
-
-  <!-- Header Section -->
   <header class="sticky top-0 z-40 bg-cardbg/95 backdrop-blur-md border-b border-brand-border smooth-transition">
     <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
-      
-      <!-- Left Controls: Search -->
       <div class="flex items-center gap-1.5 sm:gap-2">
         <button id="search-toggle-btn" class="p-2 rounded-full hover:bg-brand-light text-charcoal transition-colors" title="搜尋選品">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-          </svg>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         </button>
       </div>
-
-      <!-- Brand Logo & Tagline (Center) -->
       <div class="text-center cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-        <h1 class="text-2xl sm:text-3xl font-semibold tracking-widest text-charcoal font-serifTC leading-tight">
-          花言敘
-        </h1>
-        <span class="block text-[11px] font-garamond tracking-[0.25em] text-brand uppercase mt-0.5">
-          Hua Narrative
-        </span>
+        <h1 class="text-2xl sm:text-3xl font-semibold tracking-widest text-charcoal font-serifTC leading-tight">花言敘</h1>
+        <span class="block text-[11px] font-garamond tracking-[0.25em] text-brand uppercase mt-0.5">Hua Narrative</span>
       </div>
-
-      <!-- Cart Icon Trigger (Right) -->
       <div class="relative">
         <button id="cart-toggle-btn" onclick="openCartDrawer()" class="p-2 rounded-full hover:bg-brand-light text-charcoal transition-colors relative" title="購物車">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-          </svg>
-          <span id="cart-count-badge" class="absolute top-1 right-1 bg-brand text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-sans font-medium transform scale-0 transition-transform">
-            0
-          </span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+          <span id="cart-count-badge" class="absolute top-1 right-1 bg-brand text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-sans font-medium transform scale-0 transition-transform">0</span>
         </button>
       </div>
     </div>
-
-    <!-- Collapsible Search Input Bar -->
     <div id="search-bar" class="hidden max-w-xl mx-auto px-4 pb-4 smooth-transition">
       <div class="relative">
-        <input 
-          type="text" 
-          id="search-input" 
-          placeholder="搜尋款式、關鍵字 (如：針織, 襯衫, 洋裝, 莫蘭迪)..." 
-          class="w-full pl-10 pr-4 py-2 text-sm bg-oatmeal border border-brand-border rounded-full focus:outline-none focus:border-brand text-charcoal placeholder-subtext/70"
-        >
-        <svg class="w-4 h-4 text-subtext absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-        </svg>
+        <input type="text" id="search-input" placeholder="搜尋款式、關鍵字 (如：針織, 襯衫, 洋裝, 莫蘭迪)..." class="w-full pl-10 pr-4 py-2 text-sm bg-oatmeal border border-brand-border rounded-full focus:outline-none focus:border-brand text-charcoal placeholder-subtext/70">
+        <svg class="w-4 h-4 text-subtext absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
       </div>
     </div>
   </header>
-
-  <!-- Hero Banner -->
   <section class="bg-gradient-to-b from-brand-light/50 to-oatmeal py-8 px-4 text-center border-b border-brand-border/40">
     <div class="max-w-2xl mx-auto space-y-2">
       <span class="text-xs tracking-[0.3em] font-garamond text-brand uppercase">2026 Spring / Summer Selects</span>
       <h2 class="text-xl sm:text-2xl font-normal text-charcoal tracking-wide">靜謐日常 ‧ 溫柔敘事</h2>
-      <p class="text-xs sm:text-sm text-subtext font-light leading-relaxed max-w-md mx-auto">
-        嚴選高品質親膚布料與俐落剪裁，平價也能穿出低調奢華質感。
-      </p>
+      <p class="text-xs sm:text-sm text-subtext font-light leading-relaxed max-w-md mx-auto">嚴選高品質親膚布料與俐落剪裁，平價也能穿出低調奢華質感。</p>
     </div>
   </section>
-
-  <!-- Main Content Container -->
   <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
-    
-    <!-- Category Navigation Tabs -->
     <nav class="flex justify-center items-center gap-2 sm:gap-4 overflow-x-auto py-2 mb-8 no-scrollbar" id="category-nav">
-      <button class="category-btn active bg-brand text-white border-brand px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider whitespace-nowrap border transition-all shadow-sm" data-category="All">
-        全部選品
-      </button>
-      <button class="category-btn bg-white text-subtext border-brand-border hover:border-brand px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider whitespace-nowrap border transition-all" data-category="Tops">
-        上衣 Tops
-      </button>
-      <button class="category-btn bg-white text-subtext border-brand-border hover:border-brand px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider whitespace-nowrap border transition-all" data-category="Dresses">
-        洋裝 Dresses
-      </button>
-      <button class="category-btn bg-white text-subtext border-brand-border hover:border-brand px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider whitespace-nowrap border transition-all" data-category="Outerwear">
-        外套 Outerwear
-      </button>
-      <button class="category-btn bg-white text-subtext border-brand-border hover:border-brand px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider whitespace-nowrap border transition-all" data-category="Accessories">
-        配件 Accessories
-      </button>
+      <button class="category-btn active bg-brand text-white border-brand px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider whitespace-nowrap border transition-all shadow-sm" data-category="All">全部選品</button>
+      <button class="category-btn bg-white text-subtext border-brand-border hover:border-brand px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider whitespace-nowrap border transition-all" data-category="Tops">上衣 Tops</button>
+      <button class="category-btn bg-white text-subtext border-brand-border hover:border-brand px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider whitespace-nowrap border transition-all" data-category="Dresses">洋裝 Dresses</button>
+      <button class="category-btn bg-white text-subtext border-brand-border hover:border-brand px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider whitespace-nowrap border transition-all" data-category="Outerwear">外套 Outerwear</button>
+      <button class="category-btn bg-white text-subtext border-brand-border hover:border-brand px-5 py-2 rounded-full text-xs sm:text-sm tracking-wider whitespace-nowrap border transition-all" data-category="Accessories">配件 Accessories</button>
     </nav>
-
-    <!-- Product Grid -->
     <div id="product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-      <div class="col-span-full text-center py-16 space-y-3">
-        <i class="fa-solid fa-spinner fa-spin text-3xl text-brand"></i>
-        <p class="text-subtext text-sm">正在載入「花言敘」選品...</p>
-      </div>
+      <div class="col-span-full text-center py-16 space-y-3"><i class="fa-solid fa-spinner fa-spin text-3xl text-brand"></i><p class="text-subtext text-sm">正在載入「花言敘」選品...</p></div>
     </div>
-
-    <!-- Empty Filter Search State -->
-    <div id="no-products-msg" class="hidden text-center py-16 space-y-3">
-      <p class="text-subtext text-sm">找不到符合條件的服飾選品</p>
-      <button onclick="resetFilters()" class="text-xs text-brand underline underline-offset-4 hover:text-brand-dark">重置篩選條件</button>
-    </div>
+    <div id="no-products-msg" class="hidden text-center py-16 space-y-3"><p class="text-subtext text-sm">找不到符合條件的服飾選品</p><button onclick="resetFilters()" class="text-xs text-brand underline underline-offset-4 hover:text-brand-dark">重置篩選條件</button></div>
   </main>
-
-  <!-- Shopping Cart & Checkout Drawer Panel -->
   <div id="cart-drawer-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300">
     <div id="cart-drawer" class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-oatmeal shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out">
-      
-      <!-- Drawer Header -->
       <div class="p-4 bg-cardbg border-b border-brand-border flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <button id="cart-back-btn" onclick="goToCartStep(1)" class="hidden p-1 text-subtext hover:text-charcoal mr-1">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-            </svg>
-          </button>
-          <h3 id="drawer-title" class="text-base font-medium text-charcoal">您的購物清單</h3>
-          <span id="cart-drawer-count" class="text-xs text-subtext font-light">(0 件)</span>
+          <button id="cart-back-btn" onclick="goToCartStep(1)" class="hidden p-1 text-subtext hover:text-charcoal mr-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg></button>
+          <h3 id="drawer-title" class="text-base font-medium text-charcoal">您的購物清單</h3><span id="cart-drawer-count" class="text-xs text-subtext font-light">(0 件)</span>
         </div>
-        <button onclick="closeCartDrawer()" class="p-1 rounded-full text-subtext hover:text-charcoal hover:bg-oatmeal transition-colors">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
+        <button onclick="closeCartDrawer()" class="p-1 rounded-full text-subtext hover:text-charcoal hover:bg-oatmeal transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 18L18 6M6 6l12 12"/></svg></button>
       </div>
-
-      <!-- Step Indicator Bar -->
-      <div class="bg-cardbg/50 border-b border-brand-border/60 py-2 px-6 flex justify-around text-xs text-subtext">
-        <span id="step-indicator-1" class="font-medium text-brand border-b-2 border-brand pb-0.5">1. 清單核對</span>
-        <span id="step-indicator-2" class="pb-0.5">2. 填寫訂購資料</span>
-      </div>
-
-      <!-- Step 1: Cart Items & Free Shipping Progress -->
+      <div class="bg-cardbg/50 border-b border-brand-border/60 py-2 px-6 flex justify-around text-xs text-subtext"><span id="step-indicator-1" class="font-medium text-brand border-b-2 border-brand pb-0.5">1. 清單核對</span><span id="step-indicator-2" class="pb-0.5">2. 填寫訂購資料</span></div>
       <div id="cart-step-1" class="flex-grow flex flex-col overflow-hidden">
-        
-        <!-- Free Shipping Progress Bar -->
         <div class="bg-brand-light p-3 px-5 border-b border-brand-border/60">
-          <div id="shipping-progress-text" class="text-xs text-brand-dark mb-1.5 flex justify-between">
-            <span>滿 NT$ 1,200 免運費</span>
-            <span id="shipping-status-label" class="font-medium">還差 NT$ 1,200</span>
-          </div>
-          <div class="w-full bg-white rounded-full h-1.5 overflow-hidden border border-brand-border/40">
-            <div id="shipping-progress-bar" class="bg-brand h-full w-0 transition-all duration-500"></div>
-          </div>
+          <div id="shipping-progress-text" class="text-xs text-brand-dark mb-1.5 flex justify-between"><span>滿 NT$ 1,200 免運費</span><span id="shipping-status-label" class="font-medium">還差 NT$ 1,200</span></div>
+          <div class="w-full bg-white rounded-full h-1.5 overflow-hidden border border-brand-border/40"><div id="shipping-progress-bar" class="bg-brand h-full w-0 transition-all duration-500"></div></div>
         </div>
-
-        <!-- Cart Items List -->
         <div id="cart-items-container" class="flex-grow overflow-y-auto p-4 space-y-4 divide-y divide-brand-border/50"></div>
-
-        <!-- Step 1 Bottom Calculation & Proceed Button -->
         <div class="p-4 bg-cardbg border-t border-brand-border space-y-3">
           <div class="space-y-1 text-xs">
-            <div class="flex justify-between text-subtext">
-              <span>商品小計</span>
-              <span id="cart-subtotal" class="font-sans">NT$ 0</span>
-            </div>
-            <div class="flex justify-between text-subtext">
-              <span>預估運費</span>
-              <span id="cart-shipping-fee" class="font-sans">NT$ 60</span>
-            </div>
-            <div class="flex justify-between text-sm font-medium text-charcoal pt-1.5 border-t border-brand-border/40">
-              <span>預估總金額</span>
-              <span id="cart-total" class="text-brand font-sans text-base font-semibold">NT$ 0</span>
-            </div>
+            <div class="flex justify-between text-subtext"><span>商品小計</span><span id="cart-subtotal" class="font-sans">NT$ 0</span></div>
+            <div class="flex justify-between text-subtext"><span>預估運費</span><span id="cart-shipping-fee" class="font-sans">NT$ 60</span></div>
+            <div class="flex justify-between text-sm font-medium text-charcoal pt-1.5 border-t border-brand-border/40"><span>預估總金額</span><span id="cart-total" class="text-brand font-sans text-base font-semibold">NT$ 0</span></div>
           </div>
-
-          <button id="to-checkout-btn" onclick="goToCartStep(2)" class="w-full py-3 bg-brand hover:bg-brand-dark text-white rounded text-xs tracking-widest transition-all shadow flex items-center justify-center gap-2">
-            前往填寫資料下單
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-            </svg>
-          </button>
+          <button id="to-checkout-btn" onclick="goToCartStep(2)" class="w-full py-3 bg-brand hover:bg-brand-dark text-white rounded text-xs tracking-widest transition-all shadow flex items-center justify-center gap-2">前往填寫資料下單 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></button>
         </div>
       </div>
-
-      <!-- Step 2: Checkout Customer Information Form -->
       <div id="cart-step-2" class="flex-grow flex flex-col overflow-y-auto p-4 space-y-4 hidden">
         <form id="checkout-form" onsubmit="event.preventDefault(); submitOrderToLine();" class="space-y-4 text-xs">
-          
-          <!-- Customer Info -->
           <div class="bg-cardbg p-3.5 rounded border border-brand-border/60 space-y-3">
-            <h4 class="font-medium text-charcoal text-xs border-b border-brand-border/40 pb-1.5 flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-              訂購人資訊
-            </h4>
+            <h4 class="font-medium text-charcoal text-xs border-b border-brand-border/40 pb-1.5">訂購人資訊</h4>
             <div class="space-y-2">
-              <div>
-                <label class="block text-subtext mb-1">真實姓名 <span class="text-red-500">*</span></label>
-                <input type="text" id="cust-name" required placeholder="請填寫收件人姓名" class="w-full p-2 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand">
-              </div>
-              <div>
-                <label class="block text-subtext mb-1">聯絡電話 <span class="text-red-500">*</span></label>
-                <input type="tel" id="cust-phone" required placeholder="例如：0912345678" class="w-full p-2 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand">
-              </div>
+              <div><label class="block text-subtext mb-1" for="cust-name">真實姓名 <span class="text-red-500">*</span></label><input type="text" id="cust-name" required placeholder="請填寫收件人姓名" class="w-full p-2 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand"></div>
+              <div><label class="block text-subtext mb-1" for="cust-phone">聯絡電話 <span class="text-red-500">*</span></label><input type="tel" id="cust-phone" required placeholder="例如：0912345678" class="w-full p-2 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand"></div>
             </div>
           </div>
-
-          <!-- Shipping Options -->
           <div class="bg-cardbg p-3.5 rounded border border-brand-border/60 space-y-3">
-            <h4 class="font-medium text-charcoal text-xs border-b border-brand-border/40 pb-1.5 flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-              取貨方式
-            </h4>
+            <h4 class="font-medium text-charcoal text-xs border-b border-brand-border/40 pb-1.5">取貨方式</h4>
             <div class="space-y-2">
-              <div class="flex gap-4">
-                <label class="flex items-center gap-1.5 cursor-pointer">
-                  <input type="radio" name="shipping-method" value="7-11" checked onchange="toggleShippingFields('store')" class="accent-brand">
-                  <span>7-11 超商取貨</span>
-                </label>
-                <label class="flex items-center gap-1.5 cursor-pointer">
-                  <input type="radio" name="shipping-method" value="全家" onchange="toggleShippingFields('store')" class="accent-brand">
-                  <span>全家 超商取貨</span>
-                </label>
-                <label class="flex items-center gap-1.5 cursor-pointer">
-                  <input type="radio" name="shipping-method" value="宅配" onchange="toggleShippingFields('home')" class="accent-brand">
-                  <span>黑貓宅配</span>
-                </label>
+              <div class="flex gap-4 flex-wrap">
+                <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="shipping-method" value="7-11" checked onchange="toggleShippingFields('store')" class="accent-brand"><span>7-11 超商取貨</span></label>
+                <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="shipping-method" value="全家" onchange="toggleShippingFields('store')" class="accent-brand"><span>全家 超商取貨</span></label>
+                <label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="shipping-method" value="宅配" onchange="toggleShippingFields('home')" class="accent-brand"><span>黑貓宅配</span></label>
               </div>
-
-              <!-- Store Field -->
-              <div id="store-field" class="space-y-2 pt-1">
-                <div>
-                  <label class="block text-subtext mb-1">門市名稱 / 店號 <span class="text-red-500">*</span></label>
-                  <input type="text" id="cust-store" placeholder="例如：花園門市 (店號: 123456)" class="w-full p-2 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand">
-                </div>
-              </div>
-
-              <!-- Home Delivery Address Field -->
-              <div id="address-field" class="space-y-2 pt-1 hidden">
-                <div>
-                  <label class="block text-subtext mb-1">宅配收件地址 <span class="text-red-500">*</span></label>
-                  <input type="text" id="cust-address" placeholder="請填寫完整縣市、道路及門牌號碼" class="w-full p-2 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand">
-                </div>
-              </div>
+              <div id="store-field" class="space-y-2 pt-1"><div><label class="block text-subtext mb-1" for="cust-store">門市名稱 / 店號 <span class="text-red-500">*</span></label><input type="text" id="cust-store" placeholder="例如：花園門市 (店號: 123456)" class="w-full p-2 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand"></div></div>
+              <div id="address-field" class="space-y-2 pt-1 hidden"><div><label class="block text-subtext mb-1" for="cust-address">宅配收件地址 <span class="text-red-500">*</span></label><input type="text" id="cust-address" placeholder="請填寫完整縣市、道路及門牌號碼" class="w-full p-2 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand"></div></div>
             </div>
           </div>
-
-          <!-- Payment Options -->
           <div class="bg-cardbg p-3.5 rounded border border-brand-border/60 space-y-3">
-            <h4 class="font-medium text-charcoal text-xs border-b border-brand-border/40 pb-1.5 flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              付款方式
-            </h4>
-            <div class="flex gap-4">
-              <label class="flex items-center gap-1.5 cursor-pointer">
-                <input type="radio" name="payment-method" value="超商貨到付款" checked class="accent-brand">
-                <span>超商貨到付款</span>
-              </label>
-              <label class="flex items-center gap-1.5 cursor-pointer">
-                <input type="radio" name="payment-method" value="銀行轉帳" class="accent-brand">
-                <span>銀行轉帳</span>
-              </label>
-            </div>
+            <h4 class="font-medium text-charcoal text-xs border-b border-brand-border/40 pb-1.5">付款方式</h4>
+            <div class="flex gap-4 flex-wrap"><label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="payment-method" value="超商貨到付款" checked class="accent-brand"><span>超商貨到付款</span></label><label class="flex items-center gap-1.5 cursor-pointer"><input type="radio" name="payment-method" value="銀行轉帳" class="accent-brand"><span>銀行轉帳</span></label></div>
           </div>
-
-          <!-- Order Notes -->
-          <div class="bg-cardbg p-3.5 rounded border border-brand-border/60 space-y-2">
-            <label class="block text-subtext font-medium text-xs">訂單備註 (選填)</label>
-            <textarea id="cust-notes" rows="2" placeholder="如有特殊的尺寸確認或需求請在此留言..." class="w-full p-2 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand resize-none"></textarea>
-          </div>
-
-          <!-- Action Buttons -->
+          <div class="bg-cardbg p-3.5 rounded border border-brand-border/60 space-y-2"><label class="block text-subtext font-medium text-xs" for="cust-notes">訂單備註 (選填)</label><textarea id="cust-notes" rows="2" placeholder="如有特殊的尺寸確認或需求請在此留言..." class="w-full p-2 bg-oatmeal border border-brand-border rounded focus:outline-none focus:border-brand resize-none"></textarea></div>
           <div class="pt-2 space-y-2">
-            <button type="submit" class="w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded text-xs tracking-widest font-medium transition-all shadow flex items-center justify-center gap-2">
-              <i class="fa-brands fa-line text-lg"></i>
-              送出訂單並前往 LINE 發送
-            </button>
-            <p class="text-[10px] text-center text-subtext leading-relaxed">
-              點擊後系統會自動複製訂單明細，並為您開啟 LINE 傳送給「花言敘」客服專員！
-            </p>
+            <button type="submit" class="w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded text-xs tracking-widest font-medium transition-all shadow flex items-center justify-center gap-2"><i class="fa-brands fa-line text-lg"></i>送出訂單並前往 LINE 發送</button>
+            <p class="text-[10px] text-center text-subtext leading-relaxed">送出後會顯示訂單明細；請點擊下一步按鈕開啟 LINE，並在 LINE 中按下傳送。</p>
           </div>
-
         </form>
       </div>
-
     </div>
   </div>
-
-  <!-- Order Submitted Success Modal -->
   <div id="order-success-modal" class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
     <div class="bg-cardbg rounded-lg max-w-md w-full p-6 text-center space-y-4 shadow-2xl transform scale-95 transition-transform duration-300" id="order-success-modal-content">
-      
-      <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-        </svg>
-      </div>
-
-      <div class="space-y-1">
-        <h4 class="text-base font-semibold text-charcoal">訂單明細已成功複製！</h4>
-        <p id="success-order-id" class="text-xs font-mono text-brand font-medium">訂單編號：#HN2026102401</p>
-      </div>
-
+      <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg></div>
+      <div class="space-y-1"><h4 class="text-base font-semibold text-charcoal">訂單明細已建立</h4><p id="success-order-id" class="text-xs font-mono text-brand font-medium">訂單編號：#HN</p></div>
       <div class="bg-oatmeal p-3 rounded border border-brand-border/60 text-left text-xs space-y-1 text-subtext max-h-40 overflow-y-auto font-mono" id="copied-order-preview"></div>
-
       <div class="space-y-2 pt-2">
-        <a id="line-direct-link" href="#" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs tracking-wider font-medium shadow transition-colors flex items-center justify-center gap-1.5">
-          <i class="fa-brands fa-line text-base"></i>
-          一鍵開啟 LINE 貼上發送
-        </a>
-        <button onclick="copyOrderTextAgain()" class="w-full py-2 bg-oatmeal border border-brand-border text-charcoal rounded text-xs hover:bg-brand-light transition-colors">
-          重新複製訂單明細
-        </button>
-        <button onclick="closeSuccessModal()" class="w-full py-1 text-xs text-subtext hover:underline">
-          返回網站首頁
-        </button>
+        <a id="line-direct-link" href="https://line.me/R/oaMessage/%40229ttqiy/" target="_self" rel="noopener noreferrer" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs tracking-wider font-medium shadow transition-colors flex items-center justify-center gap-1.5"><i class="fa-brands fa-line text-base"></i>一鍵開啟 LINE 貼上發送</a>
+        <button onclick="copyOrderTextAgain()" class="w-full py-2 bg-oatmeal border border-brand-border text-charcoal rounded text-xs hover:bg-brand-light transition-colors">重新複製訂單明細</button>
+        <button onclick="closeSuccessModal()" class="w-full py-1 text-xs text-subtext hover:underline">返回網站首頁</button>
       </div>
-
     </div>
   </div>
-
-  <!-- Toast Notification -->
-  <div id="toast-msg" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-charcoal text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-2">
-    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-    <span id="toast-text">已成功加入購物車</span>
-  </div>
-
-  <!-- Footer Section -->
+  <div id="toast-msg" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-charcoal text-white text-xs px-4 py-2.5 rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span id="toast-text">已成功加入購物車</span></div>
   <footer class="bg-cardbg border-t border-brand-border mt-16 py-12 px-4 text-center">
     <div class="max-w-2xl mx-auto space-y-6">
-      <div class="space-y-2">
-        <h3 class="text-lg font-medium tracking-widest text-charcoal">花言敘｜Hua Narrative</h3>
-        <p class="text-xs text-subtext leading-relaxed max-w-md mx-auto font-light">
-          每一次的日常穿搭，都是一段靜悄悄的故事。<br>
-          我們堅持以親民實惠的價格，嚴選高品質親膚布料與俐落剪裁，陪伴你走過生活的每個溫柔時刻。
-        </p>
-      </div>
-      <div class="flex justify-center gap-6 text-xs text-brand-dark pt-2">
-        <span class="flex items-center gap-1">✦ 100% 實品拍攝</span>
-        <span class="flex items-center gap-1">✦ 台灣現貨供應</span>
-        <span class="flex items-center gap-1">✦ 售後安心保障</span>
-      </div>
-      <div class="border-t border-brand-border/50 pt-6 text-[11px] text-subtext/70">
-        © 2026 花言敘 Hua Narrative. All Rights Reserved.
-      </div>
+      <div class="space-y-2"><h3 class="text-lg font-medium tracking-widest text-charcoal">花言敘｜Hua Narrative</h3><p class="text-xs text-subtext leading-relaxed max-w-md mx-auto font-light">每一次的日常穿搭，都是一段靜悄悄的故事。<br>我們堅持以親民實惠的價格，嚴選高品質親膚布料與俐落剪裁，陪伴你走過生活的每個溫柔時刻。</p></div>
+      <div class="flex justify-center gap-6 text-xs text-brand-dark pt-2"><span class="flex items-center gap-1">✦ 100% 實品拍攝</span><span class="flex items-center gap-1">✦ 台灣現貨供應</span><span class="flex items-center gap-1">✦ 售後安心保障</span></div>
+      <div class="border-t border-brand-border/50 pt-6 text-[11px] text-subtext/70">© 2026 花言敘 Hua Narrative. All Rights Reserved.</div>
     </div>
   </footer>
-
-  <!-- App Script Logic -->
   <script>
-    // --------------------------------------------------
-    // ⚙️ 固定系統設定 (API 網址與 LINE ID)
-    // --------------------------------------------------
+    // 固定系統設定
     const API_URL = "https://script.google.com/macros/s/AKfycbyMjjG23l41ANx-jQLQCxh-0yDquqicdrVsf-HhtNSb33TZc3XRkYTM_CJMYNGx93GR/exec";
-    const LINE_OFFICIAL_ID = "@flower_shop"; 
-    // --------------------------------------------------
+    const LINE_OFFICIAL_ID = "@229ttqiy";
 
     let products = [];
     let cart = [];
@@ -420,89 +181,43 @@
     document.addEventListener('DOMContentLoaded', function() {
       setupEventListeners();
       fetchProducts();
+      toggleShippingFields('store');
+      updateCartUI();
     });
 
     function getFallbackProducts() {
       return [
-        {
-          id: '1',
-          title: '「敘白」極簡天然絲棉襯衫',
-          category: 'Tops',
-          price: 1280,
-          description: '嚴選親膚天絲與亞麻混紡，輕盈透氣，呈現溫柔自然垂墜感。',
-          imageUrl: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?q=80&w=600&auto=format&fit=crop',
-          variants: 'S (奶油白), M (奶油白), L (奶油白), S (燕麥色), M (燕麥色)'
-        },
-        {
-          id: '2',
-          title: '「微光」高腰壓褶垂墜長裙',
-          category: 'Dresses',
-          price: 1580,
-          description: '微光澤感質感面料，修飾身型剪裁，動靜之間展現簡約優雅。',
-          imageUrl: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80&w=600&auto=format&fit=crop',
-          variants: 'F (莫蘭迪綠), F (杏褐色), F (炭灰)'
-        },
-        {
-          id: '3',
-          title: '「沉香」雙面手工羊毛外套',
-          category: 'Outerwear',
-          price: 2680,
-          description: '100% 梳棉質感布料，觸感溫潤細緻，秋冬必備低調奢華單品。',
-          imageUrl: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=600&auto=format&fit=crop',
-          variants: 'S (大地棕), M (大地棕), L (經典黑)'
-        },
-        {
-          id: '4',
-          title: '「靜晨」法式排扣親膚連身裙',
-          category: 'Dresses',
-          price: 1880,
-          description: '細緻排扣設計，收腰剪裁襯托典雅氣質，日常約會皆合宜。',
-          imageUrl: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=600&auto=format&fit=crop',
-          variants: 'S (燕麥白), M (燕麥白), L (霧灰藍)'
-        }
+        { id: '1', title: '「敘白」極簡天然絲棉襯衫', category: 'Tops', price: 1280, description: '嚴選親膚天絲與亞麻混紡，輕盈透氣，呈現溫柔自然垂墜感。', imageUrl: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?q=80&w=600&auto=format&fit=crop', variants: 'S (奶油白), M (奶油白), L (奶油白), S (燕麥色), M (燕麥色)' },
+        { id: '2', title: '「微光」高腰壓褶垂墜長裙', category: 'Dresses', price: 1580, description: '微光澤感質感面料，修飾身型剪裁，動靜之間展現簡約優雅。', imageUrl: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80&w=600&auto=format&fit=crop', variants: 'F (莫蘭迪綠), F (杏褐色), F (炭灰)' },
+        { id: '3', title: '「沉香」雙面手工羊毛外套', category: 'Outerwear', price: 2680, description: '100% 梳棉質感布料，觸感溫潤細緻，秋冬必備低調奢華單品。', imageUrl: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=600&auto=format&fit=crop', variants: 'S (大地棕), M (大地棕), L (經典黑)' },
+        { id: '4', title: '「靜晨」法式排扣親膚連身裙', category: 'Dresses', price: 1880, description: '細緻排扣設計，收腰剪裁襯托典雅氣質，日常約會皆合宜。', imageUrl: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=600&auto=format&fit=crop', variants: 'S (燕麥白), M (燕麥白), L (霧灰藍)' }
       ];
     }
 
     async function fetchProducts() {
       const grid = document.getElementById('product-grid');
-      grid.innerHTML = `
-        <div class="col-span-full text-center py-16 space-y-3">
-          <i class="fa-solid fa-spinner fa-spin text-3xl text-brand"></i>
-          <p class="text-subtext text-sm">正在載入「花言敘」選品...</p>
-        </div>`;
-
+      grid.innerHTML = `<div class="col-span-full text-center py-16 space-y-3"><i class="fa-solid fa-spinner fa-spin text-3xl text-brand"></i><p class="text-subtext text-sm">正在載入「花言敘」選品...</p></div>`;
       try {
         const res = await fetch(API_URL);
+        if (!res.ok) throw new Error('商品 API 回應異常');
         const data = await res.json();
-        if (Array.isArray(data) && data.length > 0) {
-          products = data;
-        } else {
-          products = getFallbackProducts();
-        }
-        renderProducts();
+        products = Array.isArray(data) && data.length > 0 ? data : getFallbackProducts();
       } catch (err) {
+        console.warn('商品載入失敗，改用預設商品：', err);
         products = getFallbackProducts();
-        renderProducts();
       }
+      renderProducts();
     }
 
     function renderProducts() {
       const grid = document.getElementById('product-grid');
       const noProductsMsg = document.getElementById('no-products-msg');
-
       const filtered = products.filter(function(p) {
         const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
-        const matchesSearch = (p.title && p.title.toLowerCase().includes(searchQuery.toLowerCase())) || 
-                              (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase()));
+        const matchesSearch = (p.title && p.title.toLowerCase().includes(searchQuery.toLowerCase())) || (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase()));
         return matchesCategory && matchesSearch;
       });
-
-      if (!filtered || filtered.length === 0) {
-        grid.innerHTML = '';
-        noProductsMsg.classList.remove('hidden');
-        return;
-      }
-
+      if (!filtered.length) { grid.innerHTML = ''; noProductsMsg.classList.remove('hidden'); return; }
       noProductsMsg.classList.add('hidden');
       grid.innerHTML = filtered.map(function(p) {
         const variants = p.variants ? p.variants.split(',').map(function(v) { return v.trim(); }) : ['單一規格'];
@@ -510,56 +225,18 @@
           <div class="bg-cardbg rounded-lg overflow-hidden border border-brand-border/60 hover:shadow-md smooth-transition flex flex-col justify-between group">
             <div>
               <div class="relative aspect-[3/4] overflow-hidden bg-oatmeal">
-                <img 
-                  src="${p.imageUrl}" 
-                  alt="${p.title}"
-                  class="w-full h-full object-cover group-hover:scale-105 smooth-transition duration-500"
-                  loading="lazy"
-                  onerror="this.src='https://placehold.co/400x533/F1ECE6/8C7A6B?text=Hua+Narrative'"
-                >
-                <div class="absolute top-2 left-2 flex flex-col gap-1">
-                  <span class="bg-cardbg/90 backdrop-blur-sm text-brand-dark text-[10px] px-2 py-0.5 rounded tracking-wider shadow-sm border border-brand-border/40">
-                    親膚選品
-                  </span>
-                </div>
+                <img src="${p.imageUrl}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 smooth-transition duration-500" loading="lazy" onerror="this.src='https://placehold.co/400x533/F1ECE6/8C7A6B?text=Hua+Narrative'">
+                <div class="absolute top-2 left-2"><span class="bg-cardbg/90 backdrop-blur-sm text-brand-dark text-[10px] px-2 py-0.5 rounded tracking-wider shadow-sm border border-brand-border/40">親膚選品</span></div>
               </div>
-
               <div class="p-3 sm:p-4 space-y-2">
-                <h3 class="text-sm font-medium text-charcoal group-hover:text-brand transition-colors line-clamp-1">
-                  ${p.title}
-                </h3>
-                <p class="text-xs text-subtext line-clamp-2 leading-relaxed font-light hidden sm:block">
-                  ${p.description || ''}
-                </p>
-                
-                <div class="space-y-1.5 pt-1 text-xs">
-                  <div class="flex items-center gap-1.5 text-subtext">
-                    <span class="text-[10px] whitespace-nowrap">規格：</span>
-                    <select id="spec-${p.id}" class="w-full bg-oatmeal border border-brand-border/80 rounded px-1.5 py-1 text-[11px] focus:outline-none focus:border-brand">
-                      ${variants.map(function(v) { return `<option value="${v}">${v}</option>`; }).join('')}
-                    </select>
-                  </div>
-                </div>
-
-                <div class="text-sm font-sans font-semibold text-brand pt-1">
-                  NT$ ${Number(p.price).toLocaleString()}
-                </div>
+                <h3 class="text-sm font-medium text-charcoal group-hover:text-brand transition-colors line-clamp-1">${p.title}</h3>
+                <p class="text-xs text-subtext line-clamp-2 leading-relaxed font-light hidden sm:block">${p.description || ''}</p>
+                <div class="space-y-1.5 pt-1 text-xs"><div class="flex items-center gap-1.5 text-subtext"><span class="text-[10px] whitespace-nowrap">規格：</span><select id="spec-${p.id}" class="w-full bg-oatmeal border border-brand-border/80 rounded px-1.5 py-1 text-[11px] focus:outline-none focus:border-brand">${variants.map(function(v) { return `<option value="${v}">${v}</option>`; }).join('')}</select></div></div>
+                <div class="text-sm font-sans font-semibold text-brand pt-1">NT$ ${Number(p.price).toLocaleString()}</div>
               </div>
             </div>
-
-            <div class="p-3 sm:p-4 pt-0">
-              <button 
-                onclick="addToCartWithSpec('${p.id}')"
-                class="w-full py-2 bg-oatmeal hover:bg-brand hover:text-white border border-brand-border text-charcoal rounded text-xs tracking-widest smooth-transition flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-                加入購物車
-              </button>
-            </div>
-          </div>
-        `;
+            <div class="p-3 sm:p-4 pt-0"><button onclick="addToCartWithSpec('${String(p.id).replace(/'/g, "\\'")}')" class="w-full py-2 bg-oatmeal hover:bg-brand hover:text-white border border-brand-border text-charcoal rounded text-xs tracking-widest smooth-transition flex items-center justify-center gap-1.5 cursor-pointer"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>加入購物車</button></div>
+          </div>`;
       }).join('');
     }
 
@@ -573,29 +250,16 @@
           const target = e.currentTarget;
           target.classList.add('active', 'bg-brand', 'text-white', 'border-brand');
           target.classList.remove('bg-white', 'text-subtext', 'border-brand-border');
-          
           activeCategory = target.dataset.category;
           renderProducts();
         });
       });
-
       const searchBtn = document.getElementById('search-toggle-btn');
       const searchBar = document.getElementById('search-bar');
       const searchInput = document.getElementById('search-input');
-
-      searchBtn.addEventListener('click', function() {
-        searchBar.classList.toggle('hidden');
-        if (!searchBar.classList.contains('hidden')) searchInput.focus();
-      });
-
-      searchInput.addEventListener('input', function(e) {
-        searchQuery = e.target.value.trim();
-        renderProducts();
-      });
-
-      document.getElementById('cart-drawer-overlay').addEventListener('click', function(e) {
-        if (e.target === document.getElementById('cart-drawer-overlay')) closeCartDrawer();
-      });
+      searchBtn.addEventListener('click', function() { searchBar.classList.toggle('hidden'); if (!searchBar.classList.contains('hidden')) searchInput.focus(); });
+      searchInput.addEventListener('input', function(e) { searchQuery = e.target.value.trim(); renderProducts(); });
+      document.getElementById('cart-drawer-overlay').addEventListener('click', function(e) { if (e.target === document.getElementById('cart-drawer-overlay')) closeCartDrawer(); });
     }
 
     function addToCartWithSpec(productId) {
@@ -603,24 +267,10 @@
       if (!p) return;
       const specSelect = document.getElementById(`spec-${productId}`);
       const selectedSpec = specSelect ? specSelect.value : '單一規格';
-
       const cartItemId = `${productId}-${selectedSpec}`;
       const existing = cart.find(function(item) { return item.cartItemId === cartItemId; });
-
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        cart.push({
-          cartItemId: cartItemId,
-          id: p.id,
-          title: p.title,
-          price: Number(p.price),
-          image: p.imageUrl,
-          spec: selectedSpec,
-          quantity: 1
-        });
-      }
-
+      if (existing) existing.quantity += 1;
+      else cart.push({ cartItemId, id: p.id, title: p.title, price: Number(p.price), image: p.imageUrl, spec: selectedSpec, quantity: 1 });
       updateCartUI();
       showToast(`已加入：${p.title} (${selectedSpec})`);
       openCartDrawer();
@@ -629,322 +279,217 @@
     function updateQuantity(cartItemId, delta) {
       const item = cart.find(function(i) { return i.cartItemId === cartItemId; });
       if (!item) return;
-
       item.quantity += delta;
-      if (item.quantity <= 0) {
-        cart = cart.filter(function(i) { return i.cartItemId !== cartItemId; });
-      }
-
+      if (item.quantity <= 0) cart = cart.filter(function(i) { return i.cartItemId !== cartItemId; });
       updateCartUI();
     }
-
-    function removeFromCart(cartItemId) {
-      cart = cart.filter(function(i) { return i.cartItemId !== cartItemId; });
-      updateCartUI();
-    }
+    function removeFromCart(cartItemId) { cart = cart.filter(function(i) { return i.cartItemId !== cartItemId; }); updateCartUI(); }
 
     function updateCartUI() {
       const container = document.getElementById('cart-items-container');
       const badge = document.getElementById('cart-count-badge');
       const drawerCount = document.getElementById('cart-drawer-count');
-
       const totalItems = cart.reduce(function(sum, i) { return sum + i.quantity; }, 0);
-      const subtotal = cart.reduce(function(sum, i) { return sum + (i.price * i.quantity); }, 0);
+      const subtotal = cart.reduce(function(sum, i) { return sum + i.price * i.quantity; }, 0);
       const freeShippingThreshold = 1200;
       const isFreeShipping = subtotal >= freeShippingThreshold || subtotal === 0;
       const shippingFee = (subtotal === 0 || isFreeShipping) ? 0 : 60;
       const grandTotal = subtotal + shippingFee;
-
       badge.textContent = totalItems;
       badge.classList.toggle('scale-100', totalItems > 0);
       badge.classList.toggle('scale-0', totalItems === 0);
-
       drawerCount.textContent = `(${totalItems} 件)`;
-
-      if (cart.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-16 space-y-3">
-            <svg class="w-12 h-12 text-brand-border mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-            </svg>
-            <p class="text-xs text-subtext">購物車內暫無選購商品</p>
-          </div>
-        `;
+      if (!cart.length) {
+        container.innerHTML = `<div class="text-center py-16 space-y-3"><svg class="w-12 h-12 text-brand-border mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg><p class="text-xs text-subtext">購物車內暫無選購商品</p></div>`;
       } else {
         container.innerHTML = cart.map(function(item) {
-          return `
-            <div class="pt-3 first:pt-0 flex gap-3 items-center">
-              <img src="${item.image}" alt="${item.title}" class="w-14 h-18 object-cover rounded bg-white flex-shrink-0 border border-brand-border/40" onerror="this.src='https://placehold.co/100x120/F1ECE6/8C7A6B?text=Hua'">
-              <div class="flex-grow space-y-1">
-                <h4 class="text-xs font-medium text-charcoal line-clamp-1">${item.title}</h4>
-                <p class="text-[11px] text-subtext font-light">規格：${item.spec}</p>
-                <div class="text-xs text-brand font-sans font-semibold">NT$ ${item.price.toLocaleString()}</div>
-                
-                <div class="flex items-center gap-2 pt-1">
-                  <div class="flex items-center border border-brand-border rounded bg-white">
-                    <button onclick="updateQuantity('${item.cartItemId}', -1)" class="px-2 py-0.5 text-xs text-subtext hover:text-charcoal">-</button>
-                    <span class="px-2 text-xs font-sans text-charcoal">${item.quantity}</span>
-                    <button onclick="updateQuantity('${item.cartItemId}', 1)" class="px-2 py-0.5 text-xs text-subtext hover:text-charcoal">+</button>
-                  </div>
-                  <button onclick="removeFromCart('${item.cartItemId}')" class="text-[10px] text-subtext/70 hover:text-red-500 underline">移除</button>
-                </div>
-              </div>
-            </div>
-          `;
+          return `<div class="pt-3 first:pt-0 flex gap-3 items-center"><img src="${item.image}" alt="${item.title}" class="w-14 h-18 object-cover rounded bg-white flex-shrink-0 border border-brand-border/40" onerror="this.src='https://placehold.co/100x120/F1ECE6/8C7A6B?text=Hua'"><div class="flex-grow space-y-1"><h4 class="text-xs font-medium text-charcoal line-clamp-1">${item.title}</h4><p class="text-[11px] text-subtext font-light">規格：${item.spec}</p><div class="text-xs text-brand font-sans font-semibold">NT$ ${item.price.toLocaleString()}</div><div class="flex items-center gap-2 pt-1"><div class="flex items-center border border-brand-border rounded bg-white"><button onclick="updateQuantity('${String(item.cartItemId).replace(/'/g, "\\'")}', -1)" class="px-2 py-0.5 text-xs text-subtext hover:text-charcoal">-</button><span class="px-2 text-xs font-sans text-charcoal">${item.quantity}</span><button onclick="updateQuantity('${String(item.cartItemId).replace(/'/g, "\\'")}', 1)" class="px-2 py-0.5 text-xs text-subtext hover:text-charcoal">+</button></div><button onclick="removeFromCart('${String(item.cartItemId).replace(/'/g, "\\'")}')" class="text-[10px] text-subtext/70 hover:text-red-500 underline">移除</button></div></div></div>`;
         }).join('');
       }
-
       const progressBar = document.getElementById('shipping-progress-bar');
       const statusLabel = document.getElementById('shipping-status-label');
-      
-      if (subtotal === 0) {
-        progressBar.style.width = '0%';
-        statusLabel.textContent = `還差 NT$ ${freeShippingThreshold.toLocaleString()}`;
-      } else if (subtotal >= freeShippingThreshold) {
-        progressBar.style.width = '100%';
-        statusLabel.textContent = '已享有免運優惠！';
-      } else {
-        const percent = Math.min((subtotal / freeShippingThreshold) * 100, 100);
-        progressBar.style.width = `${percent}%`;
-        statusLabel.textContent = `還差 NT$ ${(freeShippingThreshold - subtotal).toLocaleString()}`;
-      }
-
+      if (subtotal === 0) { progressBar.style.width = '0%'; statusLabel.textContent = `還差 NT$ ${freeShippingThreshold.toLocaleString()}`; }
+      else if (subtotal >= freeShippingThreshold) { progressBar.style.width = '100%'; statusLabel.textContent = '已享有免運優惠！'; }
+      else { progressBar.style.width = `${Math.min(subtotal / freeShippingThreshold * 100, 100)}%`; statusLabel.textContent = `還差 NT$ ${(freeShippingThreshold - subtotal).toLocaleString()}`; }
       document.getElementById('cart-subtotal').textContent = `NT$ ${subtotal.toLocaleString()}`;
       document.getElementById('cart-shipping-fee').textContent = shippingFee === 0 ? 'NT$ 0 (免運)' : `NT$ ${shippingFee}`;
       document.getElementById('cart-total').textContent = `NT$ ${grandTotal.toLocaleString()}`;
     }
 
     function goToCartStep(step) {
-      if (step === 2 && cart.length === 0) {
-        showToast('請先將商品加入購物車才能前往結帳');
-        return;
-      }
-
+      if (step === 2 && cart.length === 0) { showToast('請先將商品加入購物車才能前往結帳'); return; }
       currentStep = step;
-      const step1 = document.getElementById('cart-step-1');
-      const step2 = document.getElementById('cart-step-2');
-      const backBtn = document.getElementById('cart-back-btn');
-      const title = document.getElementById('drawer-title');
-      const ind1 = document.getElementById('step-indicator-1');
-      const ind2 = document.getElementById('step-indicator-2');
-
+      const step1 = document.getElementById('cart-step-1'), step2 = document.getElementById('cart-step-2');
+      const backBtn = document.getElementById('cart-back-btn'), title = document.getElementById('drawer-title');
+      const ind1 = document.getElementById('step-indicator-1'), ind2 = document.getElementById('step-indicator-2');
       if (step === 1) {
-        step1.classList.remove('hidden');
-        step2.classList.add('hidden');
-        backBtn.classList.add('hidden');
-        title.textContent = '您的購物清單';
-        ind1.className = "font-medium text-brand border-b-2 border-brand pb-0.5";
-        ind2.className = "pb-0.5 text-subtext";
+        step1.classList.remove('hidden'); step2.classList.add('hidden'); backBtn.classList.add('hidden'); title.textContent = '您的購物清單';
+        ind1.className = "font-medium text-brand border-b-2 border-brand pb-0.5"; ind2.className = "pb-0.5 text-subtext";
       } else {
-        step1.classList.add('hidden');
-        step2.classList.remove('hidden');
-        backBtn.classList.remove('hidden');
-        title.textContent = '填寫訂購資料';
-        ind2.className = "font-medium text-brand border-b-2 border-brand pb-0.5";
-        ind1.className = "pb-0.5 text-subtext";
+        step1.classList.add('hidden'); step2.classList.remove('hidden'); backBtn.classList.remove('hidden'); title.textContent = '填寫訂購資料';
+        ind2.className = "font-medium text-brand border-b-2 border-brand pb-0.5"; ind1.className = "pb-0.5 text-subtext";
       }
     }
 
     function toggleShippingFields(type) {
-      const storeField = document.getElementById('store-field');
-      const addressField = document.getElementById('address-field');
-      const storeInput = document.getElementById('cust-store');
-      const addressInput = document.getElementById('cust-address');
-
-      if (type === 'store') {
-        storeField.classList.remove('hidden');
-        addressField.classList.add('hidden');
-        storeInput.required = true;
-        addressInput.required = false;
-      } else {
-        storeField.classList.add('hidden');
-        addressField.classList.remove('hidden');
-        storeInput.required = false;
-        addressInput.required = true;
-      }
+      const storeField = document.getElementById('store-field'), addressField = document.getElementById('address-field');
+      const storeInput = document.getElementById('cust-store'), addressInput = document.getElementById('cust-address');
+      if (type === 'store') { storeField.classList.remove('hidden'); addressField.classList.add('hidden'); storeInput.required = true; addressInput.required = false; }
+      else { storeField.classList.add('hidden'); addressField.classList.remove('hidden'); storeInput.required = false; addressInput.required = true; }
     }
 
-    function submitOrderToLine() {
-      if (cart.length === 0) {
-        showToast('購物車內沒有商品！');
-        return;
-      }
+    function buildLineUrl(message) {
+      const lineId = LINE_OFFICIAL_ID.trim();
+      if (!lineId || lineId === '@flower_shop') throw new Error('LINE 官方帳號 ID 尚未正確設定');
+      return `https://line.me/R/oaMessage/${encodeURIComponent(lineId)}/?${encodeURIComponent(message)}`;
+    }
 
-      const custName = document.getElementById('cust-name').value.trim();
-      const custPhone = document.getElementById('cust-phone').value.trim();
-      const shippingOption = document.querySelector('input[name="shipping-method"]:checked');
-      const paymentOption = document.querySelector('input[name="payment-method"]:checked');
-      
-      const shippingMethod = shippingOption ? shippingOption.value : '7-11';
-      const paymentMethod = paymentOption ? paymentOption.value : '超商貨到付款';
-      const custNotes = document.getElementById('cust-notes').value.trim();
+    async function submitOrderToLine() {
+      if (cart.length === 0) { showToast('購物車內沒有商品！'); return; }
 
-      let deliveryDetail = (shippingMethod === '宅配') 
-        ? document.getElementById('cust-address').value.trim() 
-        : document.getElementById('cust-store').value.trim();
+      const form = document.getElementById('checkout-form');
+      if (!form.reportValidity()) return;
 
-      if (!custName || !custPhone) {
-        showToast('請填寫完整姓名與電話！');
-        return;
-      }
+      const submitButton = form.querySelector('button[type="submit"]');
+      if (submitButton) { submitButton.disabled = true; submitButton.classList.add('opacity-60', 'cursor-not-allowed'); }
 
-      if (!deliveryDetail) {
-        showToast(shippingMethod === '宅配' ? '請填寫宅配地址！' : '請填寫門市名稱與店號！');
-        return;
-      }
+      try {
+        const custName = document.getElementById('cust-name').value.trim();
+        const custPhone = document.getElementById('cust-phone').value.trim();
+        const shippingOption = document.querySelector('input[name="shipping-method"]:checked');
+        const paymentOption = document.querySelector('input[name="payment-method"]:checked');
+        const shippingMethod = shippingOption ? shippingOption.value : '7-11';
+        const paymentMethod = paymentOption ? paymentOption.value : '超商貨到付款';
+        const custNotes = document.getElementById('cust-notes').value.trim();
+        const deliveryDetail = shippingMethod === '宅配'
+          ? document.getElementById('cust-address').value.trim()
+          : document.getElementById('cust-store').value.trim();
 
-      const orderNum = 'HN' + new Date().toISOString().slice(0,10).replace(/-/g,'') + Math.floor(1000 + Math.random() * 9000);
-      const subtotal = cart.reduce(function(sum, i) { return sum + (i.price * i.quantity); }, 0);
-      const shippingFee = subtotal >= 1200 ? 0 : 60;
-      const grandTotal = subtotal + shippingFee;
+        if (!custName || !custPhone) { showToast('請填寫完整姓名與電話！'); return; }
+        if (!deliveryDetail) { showToast(shippingMethod === '宅配' ? '請填寫宅配地址！' : '請填寫門市名稱與店號！'); return; }
 
-      let msg = "【花言敘 Hua Narrative｜官方訂購單】\n";
-      msg += "訂單編號：#" + orderNum + "\n";
-      msg += "-----------------------------------\n";
-      msg += "訂購人姓名：" + custName + "\n";
-      msg += "聯絡電話：" + custPhone + "\n";
-      msg += "取貨方式：" + shippingMethod + " (" + deliveryDetail + ")\n";
-      msg += "付款方式：" + paymentMethod + "\n";
-      if (custNotes) msg += "訂單備註：" + custNotes + "\n";
-      msg += "-----------------------------------\n";
-      msg += "訂購商品清單：\n";
-      
-      cart.forEach(function(item, index) {
-        msg += (index + 1) + ". " + item.title + " [" + item.spec + "] x " + item.quantity + " (NT$ " + (item.price * item.quantity).toLocaleString() + ")\n";
-      });
+        const orderNum = 'HN' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + Math.floor(1000 + Math.random() * 9000);
+        const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+        const shippingFee = subtotal >= 1200 ? 0 : 60;
+        const grandTotal = subtotal + shippingFee;
 
-      msg += "-----------------------------------\n";
-      msg += "商品小計：NT$ " + subtotal.toLocaleString() + "\n";
-      msg += "預估運費：NT$ " + (shippingFee === 0 ? '0 (已享免運)' : shippingFee) + "\n";
-      msg += "應付總金額：NT$ " + grandTotal.toLocaleString() + "\n";
-      msg += "-----------------------------------\n";
-      msg += "辛苦客服專員，再請幫我確認現貨狀況，謝謝！";
+        let msg = "【花言敘 Hua Narrative｜官方訂購單】\n";
+        msg += "訂單編號：#" + orderNum + "\n";
+        msg += "-----------------------------------\n";
+        msg += "訂購人姓名：" + custName + "\n";
+        msg += "聯絡電話：" + custPhone + "\n";
+        msg += "取貨方式：" + shippingMethod + " (" + deliveryDetail + ")\n";
+        msg += "付款方式：" + paymentMethod + "\n";
+        if (custNotes) msg += "訂單備註：" + custNotes + "\n";
+        msg += "-----------------------------------\n訂購商品清單：\n";
+        cart.forEach(function(item, index) {
+          msg += (index + 1) + ". " + item.title + " [" + item.spec + "] x " + item.quantity + " (NT$ " + (item.price * item.quantity).toLocaleString() + ")\n";
+        });
+        msg += "-----------------------------------\n";
+        msg += "商品小計：NT$ " + subtotal.toLocaleString() + "\n";
+        msg += "預估運費：NT$ " + (shippingFee === 0 ? '0 (已享免運)' : shippingFee) + "\n";
+        msg += "應付總金額：NT$ " + grandTotal.toLocaleString() + "\n";
+        msg += "-----------------------------------\n辛苦客服專員，再請幫我確認現貨狀況，謝謝！";
 
-      generatedOrderText = msg;
+        generatedOrderText = msg;
+        const lineUrl = buildLineUrl(msg);
 
-      copyTextToClipboard(msg);
-
-      const cleanLineId = LINE_OFFICIAL_ID.trim().replace(/^@/, '');
-      const encodedMsg = encodeURIComponent(msg);
-      
-      let lineUrl = "";
-      if (cleanLineId) {
-        lineUrl = "https://line.me/R/oaMessage/%40" + cleanLineId + "/?" + encodedMsg;
-      } else {
-        lineUrl = "https://line.me/R/msg/text/?" + encodedMsg;
-      }
-
-      const lineDirectBtn = document.getElementById('line-direct-link');
-      if (lineDirectBtn) {
+        const lineDirectBtn = document.getElementById('line-direct-link');
+        if (!lineDirectBtn) throw new Error('找不到 LINE 訂單按鈕');
         lineDirectBtn.href = lineUrl;
-        lineDirectBtn.removeAttribute('target');
-      }
+        lineDirectBtn.target = '_self';
+        lineDirectBtn.rel = 'noopener noreferrer';
 
-      document.getElementById('success-order-id').textContent = '訂單編號：#' + orderNum;
-      document.getElementById('copied-order-preview').innerText = msg;
+        document.getElementById('success-order-id').textContent = '訂單編號：#' + orderNum;
+        document.getElementById('copied-order-preview').innerText = msg;
 
-      if (API_URL) {
-        try {
+        // Google 試算表同步；no-cors 模式下無法讀取伺服器回應狀態。
+        if (API_URL) {
           fetch(API_URL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: JSON.stringify({
-              orderNum: orderNum,
-              custName: custName,
-              custPhone: custPhone,
-              shippingMethod: shippingMethod,
-              deliveryDetail: deliveryDetail,
-              paymentMethod: paymentMethod,
-              custNotes: custNotes,
-              items: cart,
-              subtotal: subtotal,
-              shippingFee: shippingFee,
-              grandTotal: grandTotal,
-              createdAt: new Date().toISOString()
+              orderNum, custName, custPhone, shippingMethod, deliveryDetail,
+              paymentMethod, custNotes, items: cart, subtotal, shippingFee,
+              grandTotal, createdAt: new Date().toISOString()
             })
-          }).catch(function(err) { console.log('Google Sheets sync notice:', err); });
-        } catch(e) {}
+          }).catch(err => console.warn('Google Sheets sync notice:', err));
+        }
+
+        openSuccessModal();
+        showToast('訂單已建立，請點擊下方按鈕前往 LINE。');
+      } catch (err) {
+        console.error('送出訂單時發生錯誤：', err);
+        showToast('產生訂單或 LINE 連結失敗，請稍後再試。');
+      } finally {
+        if (submitButton) { submitButton.disabled = false; submitButton.classList.remove('opacity-60', 'cursor-not-allowed'); }
       }
-
-      openSuccessModal();
-      showToast('訂單明細已成功複製！');
-
-      window.location.href = lineUrl;
     }
 
-    function copyTextToClipboard(text) {
-      if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(text);
-      } else {
-        const textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.position = "fixed";
-        textArea.style.left = "-9999px";
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
+    async function copyTextToClipboard(text) {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const textArea = document.createElement('textarea');
+          textArea.value = text;
+          textArea.style.position = 'fixed';
+          textArea.style.left = '-9999px';
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          const copied = document.execCommand('copy');
+          document.body.removeChild(textArea);
+          if (!copied) throw new Error('瀏覽器拒絕複製');
+        }
+        showToast('訂單明細已複製！');
+        return true;
+      } catch (err) {
+        console.warn('複製訂單文字失敗：', err);
+        showToast('無法自動複製，請在訂單明細中長按選取文字。');
+        return false;
       }
     }
 
     function copyOrderTextAgain() {
-      if (generatedOrderText) {
-        copyTextToClipboard(generatedOrderText);
-        showToast('訂單明細已再次複製！');
-      }
+      if (generatedOrderText) copyTextToClipboard(generatedOrderText);
     }
 
     function openCartDrawer() {
       document.getElementById('cart-drawer-overlay').classList.remove('opacity-0', 'pointer-events-none');
       document.getElementById('cart-drawer').classList.remove('translate-x-full');
     }
-
     function closeCartDrawer() {
       document.getElementById('cart-drawer-overlay').classList.add('opacity-0', 'pointer-events-none');
       document.getElementById('cart-drawer').classList.add('translate-x-full');
     }
-
     function openSuccessModal() {
-      const modal = document.getElementById('order-success-modal');
-      const content = document.getElementById('order-success-modal-content');
+      const modal = document.getElementById('order-success-modal'), content = document.getElementById('order-success-modal-content');
       modal.classList.remove('opacity-0', 'pointer-events-none');
-      content.classList.remove('scale-95');
-      content.classList.add('scale-100');
+      content.classList.remove('scale-95'); content.classList.add('scale-100');
     }
-
     function closeSuccessModal() {
-      const modal = document.getElementById('order-success-modal');
-      const content = document.getElementById('order-success-modal-content');
+      const modal = document.getElementById('order-success-modal'), content = document.getElementById('order-success-modal-content');
       modal.classList.add('opacity-0', 'pointer-events-none');
-      content.classList.remove('scale-100');
-      content.classList.add('scale-95');
-      closeCartDrawer();
-      goToCartStep(1);
+      content.classList.remove('scale-100'); content.classList.add('scale-95');
+      closeCartDrawer(); goToCartStep(1);
     }
-
     function resetFilters() {
-      activeCategory = 'All';
-      searchQuery = '';
-      document.getElementById('search-input').value = '';
+      activeCategory = 'All'; searchQuery = ''; document.getElementById('search-input').value = '';
       document.querySelectorAll('.category-btn').forEach(function(b) {
         b.classList.remove('active', 'bg-brand', 'text-white', 'border-brand');
         b.classList.add('bg-white', 'text-subtext', 'border-brand-border');
       });
       const allBtn = document.querySelector('[data-category="All"]');
-      if (allBtn) {
-        allBtn.classList.add('active', 'bg-brand', 'text-white', 'border-brand');
-      }
+      if (allBtn) { allBtn.classList.add('active', 'bg-brand', 'text-white', 'border-brand'); allBtn.classList.remove('bg-white', 'text-subtext', 'border-brand-border'); }
       renderProducts();
     }
-
     function showToast(message) {
       const toast = document.getElementById('toast-msg');
       document.getElementById('toast-text').textContent = message;
       toast.classList.remove('opacity-0', 'pointer-events-none');
-      setTimeout(function() {
-        toast.classList.add('opacity-0', 'pointer-events-none');
-      }, 2500);
+      setTimeout(function() { toast.classList.add('opacity-0', 'pointer-events-none'); }, 2500);
     }
   </script>
 </body>
