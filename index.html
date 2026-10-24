@@ -359,7 +359,7 @@
       <div class="bg-oatmeal p-3 rounded border border-brand-border/60 text-left text-xs space-y-1 text-subtext max-h-40 overflow-y-auto font-mono" id="copied-order-preview"></div>
 
       <div class="space-y-2 pt-2">
-        <a id="line-direct-link" href="#" target="_blank" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs tracking-wider font-medium shadow transition-colors flex items-center justify-center gap-1.5">
+        <a id="line-direct-link" href="#" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-xs tracking-wider font-medium shadow transition-colors flex items-center justify-center gap-1.5">
           <i class="fa-brands fa-line text-base"></i>
           一鍵開啟 LINE 貼上發送
         </a>
@@ -407,8 +407,6 @@
     // ⚙️ 固定系統設定 (API 網址與 LINE ID)
     // --------------------------------------------------
     const API_URL = "https://script.google.com/macros/s/AKfycbyMjjG23l41ANx-jQLQCxh-0yDquqicdrVsf-HhtNSb33TZc3XRkYTM_CJMYNGx93GR/exec";
-    
-    // ⚠️ 請填入老婆正確的 LINE 官方帳號 ID (請至 LINE 官方帳號管理後台確認「Basic ID」)
     const LINE_OFFICIAL_ID = "@flower_shop"; 
     // --------------------------------------------------
 
@@ -419,10 +417,51 @@
     let currentStep = 1;
     let generatedOrderText = '';
 
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', function() {
       setupEventListeners();
       fetchProducts();
     });
+
+    function getFallbackProducts() {
+      return [
+        {
+          id: '1',
+          title: '「敘白」極簡天然絲棉襯衫',
+          category: 'Tops',
+          price: 1280,
+          description: '嚴選親膚天絲與亞麻混紡，輕盈透氣，呈現溫柔自然垂墜感。',
+          imageUrl: 'https://images.unsplash.com/photo-1598554747436-c9293d6a588f?q=80&w=600&auto=format&fit=crop',
+          variants: 'S (奶油白), M (奶油白), L (奶油白), S (燕麥色), M (燕麥色)'
+        },
+        {
+          id: '2',
+          title: '「微光」高腰壓褶垂墜長裙',
+          category: 'Dresses',
+          price: 1580,
+          description: '微光澤感質感面料，修飾身型剪裁，動靜之間展現簡約優雅。',
+          imageUrl: 'https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?q=80&w=600&auto=format&fit=crop',
+          variants: 'F (莫蘭迪綠), F (杏褐色), F (炭灰)'
+        },
+        {
+          id: '3',
+          title: '「沉香」雙面手工羊毛外套',
+          category: 'Outerwear',
+          price: 2680,
+          description: '100% 梳棉質感布料，觸感溫潤細緻，秋冬必備低調奢華單品。',
+          imageUrl: 'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=600&auto=format&fit=crop',
+          variants: 'S (大地棕), M (大地棕), L (經典黑)'
+        },
+        {
+          id: '4',
+          title: '「靜晨」法式排扣親膚連身裙',
+          category: 'Dresses',
+          price: 1880,
+          description: '細緻排扣設計，收腰剪裁襯托典雅氣質，日常約會皆合宜。',
+          imageUrl: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=600&auto=format&fit=crop',
+          variants: 'S (燕麥白), M (燕麥白), L (霧灰藍)'
+        }
+      ];
+    }
 
     async function fetchProducts() {
       const grid = document.getElementById('product-grid');
@@ -434,14 +473,16 @@
 
       try {
         const res = await fetch(API_URL);
-        products = await res.json();
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          products = data;
+        } else {
+          products = getFallbackProducts();
+        }
         renderProducts();
       } catch (err) {
-        grid.innerHTML = `
-          <div class="col-span-full text-center py-16 space-y-3">
-            <p class="text-red-500 text-sm font-medium">資料載入失敗！</p>
-            <p class="text-xs text-subtext">請重新整理頁面，或檢查網路連線。</p>
-          </div>`;
+        products = getFallbackProducts();
+        renderProducts();
       }
     }
 
@@ -449,7 +490,7 @@
       const grid = document.getElementById('product-grid');
       const noProductsMsg = document.getElementById('no-products-msg');
 
-      const filtered = products.filter(p => {
+      const filtered = products.filter(function(p) {
         const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
         const matchesSearch = (p.title && p.title.toLowerCase().includes(searchQuery.toLowerCase())) || 
                               (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -463,8 +504,8 @@
       }
 
       noProductsMsg.classList.add('hidden');
-      grid.innerHTML = filtered.map(p => {
-        const variants = p.variants ? p.variants.split(',').map(v => v.trim()) : ['單一規格'];
+      grid.innerHTML = filtered.map(function(p) {
+        const variants = p.variants ? p.variants.split(',').map(function(v) { return v.trim(); }) : ['單一規格'];
         return `
           <div class="bg-cardbg rounded-lg overflow-hidden border border-brand-border/60 hover:shadow-md smooth-transition flex flex-col justify-between group">
             <div>
@@ -474,7 +515,7 @@
                   alt="${p.title}"
                   class="w-full h-full object-cover group-hover:scale-105 smooth-transition duration-500"
                   loading="lazy"
-                  onerror="this.src='https://via.placeholder.com/400x533?text=Hua+Narrative'"
+                  onerror="this.src='https://placehold.co/400x533/F1ECE6/8C7A6B?text=Hua+Narrative'"
                 >
                 <div class="absolute top-2 left-2 flex flex-col gap-1">
                   <span class="bg-cardbg/90 backdrop-blur-sm text-brand-dark text-[10px] px-2 py-0.5 rounded tracking-wider shadow-sm border border-brand-border/40">
@@ -495,7 +536,7 @@
                   <div class="flex items-center gap-1.5 text-subtext">
                     <span class="text-[10px] whitespace-nowrap">規格：</span>
                     <select id="spec-${p.id}" class="w-full bg-oatmeal border border-brand-border/80 rounded px-1.5 py-1 text-[11px] focus:outline-none focus:border-brand">
-                      ${variants.map(v => `<option value="${v}">${v}</option>`).join('')}
+                      ${variants.map(function(v) { return `<option value="${v}">${v}</option>`; }).join('')}
                     </select>
                   </div>
                 </div>
@@ -509,7 +550,7 @@
             <div class="p-3 sm:p-4 pt-0">
               <button 
                 onclick="addToCartWithSpec('${p.id}')"
-                class="w-full py-2 bg-oatmeal hover:bg-brand hover:text-white border border-brand-border text-charcoal rounded text-xs tracking-widest smooth-transition flex items-center justify-center gap-1.5"
+                class="w-full py-2 bg-oatmeal hover:bg-brand hover:text-white border border-brand-border text-charcoal rounded text-xs tracking-widest smooth-transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
@@ -523,16 +564,17 @@
     }
 
     function setupEventListeners() {
-      document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          document.querySelectorAll('.category-btn').forEach(b => {
+      document.querySelectorAll('.category-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          document.querySelectorAll('.category-btn').forEach(function(b) {
             b.classList.remove('active', 'bg-brand', 'text-white', 'border-brand');
             b.classList.add('bg-white', 'text-subtext', 'border-brand-border');
           });
-          e.target.classList.add('active', 'bg-brand', 'text-white', 'border-brand');
-          e.target.classList.remove('bg-white', 'text-subtext', 'border-brand-border');
+          const target = e.currentTarget;
+          target.classList.add('active', 'bg-brand', 'text-white', 'border-brand');
+          target.classList.remove('bg-white', 'text-subtext', 'border-brand-border');
           
-          activeCategory = e.target.dataset.category;
+          activeCategory = target.dataset.category;
           renderProducts();
         });
       });
@@ -541,34 +583,35 @@
       const searchBar = document.getElementById('search-bar');
       const searchInput = document.getElementById('search-input');
 
-      searchBtn.addEventListener('click', () => {
+      searchBtn.addEventListener('click', function() {
         searchBar.classList.toggle('hidden');
         if (!searchBar.classList.contains('hidden')) searchInput.focus();
       });
 
-      searchInput.addEventListener('input', (e) => {
+      searchInput.addEventListener('input', function(e) {
         searchQuery = e.target.value.trim();
         renderProducts();
       });
 
-      document.getElementById('cart-drawer-overlay').addEventListener('click', (e) => {
+      document.getElementById('cart-drawer-overlay').addEventListener('click', function(e) {
         if (e.target === document.getElementById('cart-drawer-overlay')) closeCartDrawer();
       });
     }
 
     function addToCartWithSpec(productId) {
-      const p = products.find(item => String(item.id) === String(productId));
+      const p = products.find(function(item) { return String(item.id) === String(productId); });
+      if (!p) return;
       const specSelect = document.getElementById(`spec-${productId}`);
       const selectedSpec = specSelect ? specSelect.value : '單一規格';
 
       const cartItemId = `${productId}-${selectedSpec}`;
-      const existing = cart.find(item => item.cartItemId === cartItemId);
+      const existing = cart.find(function(item) { return item.cartItemId === cartItemId; });
 
       if (existing) {
         existing.quantity += 1;
       } else {
         cart.push({
-          cartItemId,
+          cartItemId: cartItemId,
           id: p.id,
           title: p.title,
           price: Number(p.price),
@@ -584,17 +627,19 @@
     }
 
     function updateQuantity(cartItemId, delta) {
-      const item = cart.find(i => i.cartItemId === cartItemId);
+      const item = cart.find(function(i) { return i.cartItemId === cartItemId; });
       if (!item) return;
 
       item.quantity += delta;
-      if (item.quantity <= 0) cart = cart.filter(i => i.cartItemId !== cartItemId);
+      if (item.quantity <= 0) {
+        cart = cart.filter(function(i) { return i.cartItemId !== cartItemId; });
+      }
 
       updateCartUI();
     }
 
     function removeFromCart(cartItemId) {
-      cart = cart.filter(i => i.cartItemId !== cartItemId);
+      cart = cart.filter(function(i) { return i.cartItemId !== cartItemId; });
       updateCartUI();
     }
 
@@ -603,8 +648,8 @@
       const badge = document.getElementById('cart-count-badge');
       const drawerCount = document.getElementById('cart-drawer-count');
 
-      const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
-      const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+      const totalItems = cart.reduce(function(sum, i) { return sum + i.quantity; }, 0);
+      const subtotal = cart.reduce(function(sum, i) { return sum + (i.price * i.quantity); }, 0);
       const freeShippingThreshold = 1200;
       const isFreeShipping = subtotal >= freeShippingThreshold || subtotal === 0;
       const shippingFee = (subtotal === 0 || isFreeShipping) ? 0 : 60;
@@ -626,25 +671,27 @@
           </div>
         `;
       } else {
-        container.innerHTML = cart.map(item => `
-          <div class="pt-3 first:pt-0 flex gap-3 items-center">
-            <img src="${item.image}" alt="${item.title}" class="w-14 h-18 object-cover rounded bg-white flex-shrink-0 border border-brand-border/40" onerror="this.src='https://via.placeholder.com/100?text=Hua'">
-            <div class="flex-grow space-y-1">
-              <h4 class="text-xs font-medium text-charcoal line-clamp-1">${item.title}</h4>
-              <p class="text-[11px] text-subtext font-light">規格：${item.spec}</p>
-              <div class="text-xs text-brand font-sans font-semibold">NT$ ${item.price.toLocaleString()}</div>
-              
-              <div class="flex items-center gap-2 pt-1">
-                <div class="flex items-center border border-brand-border rounded bg-white">
-                  <button onclick="updateQuantity('${item.cartItemId}', -1)" class="px-2 py-0.5 text-xs text-subtext hover:text-charcoal">-</button>
-                  <span class="px-2 text-xs font-sans text-charcoal">${item.quantity}</span>
-                  <button onclick="updateQuantity('${item.cartItemId}', 1)" class="px-2 py-0.5 text-xs text-subtext hover:text-charcoal">+</button>
+        container.innerHTML = cart.map(function(item) {
+          return `
+            <div class="pt-3 first:pt-0 flex gap-3 items-center">
+              <img src="${item.image}" alt="${item.title}" class="w-14 h-18 object-cover rounded bg-white flex-shrink-0 border border-brand-border/40" onerror="this.src='https://placehold.co/100x120/F1ECE6/8C7A6B?text=Hua'">
+              <div class="flex-grow space-y-1">
+                <h4 class="text-xs font-medium text-charcoal line-clamp-1">${item.title}</h4>
+                <p class="text-[11px] text-subtext font-light">規格：${item.spec}</p>
+                <div class="text-xs text-brand font-sans font-semibold">NT$ ${item.price.toLocaleString()}</div>
+                
+                <div class="flex items-center gap-2 pt-1">
+                  <div class="flex items-center border border-brand-border rounded bg-white">
+                    <button onclick="updateQuantity('${item.cartItemId}', -1)" class="px-2 py-0.5 text-xs text-subtext hover:text-charcoal">-</button>
+                    <span class="px-2 text-xs font-sans text-charcoal">${item.quantity}</span>
+                    <button onclick="updateQuantity('${item.cartItemId}', 1)" class="px-2 py-0.5 text-xs text-subtext hover:text-charcoal">+</button>
+                  </div>
+                  <button onclick="removeFromCart('${item.cartItemId}')" class="text-[10px] text-subtext/70 hover:text-red-500 underline">移除</button>
                 </div>
-                <button onclick="removeFromCart('${item.cartItemId}')" class="text-[10px] text-subtext/70 hover:text-red-500 underline">移除</button>
               </div>
             </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       }
 
       const progressBar = document.getElementById('shipping-progress-bar');
@@ -718,60 +765,112 @@
     }
 
     function submitOrderToLine() {
-      if (cart.length === 0) return;
+      if (cart.length === 0) {
+        showToast('購物車內沒有商品！');
+        return;
+      }
 
       const custName = document.getElementById('cust-name').value.trim();
       const custPhone = document.getElementById('cust-phone').value.trim();
-      const shippingMethod = document.querySelector('input[name="shipping-method"]:checked').value;
-      const paymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+      const shippingOption = document.querySelector('input[name="shipping-method"]:checked');
+      const paymentOption = document.querySelector('input[name="payment-method"]:checked');
+      
+      const shippingMethod = shippingOption ? shippingOption.value : '7-11';
+      const paymentMethod = paymentOption ? paymentOption.value : '超商貨到付款';
       const custNotes = document.getElementById('cust-notes').value.trim();
 
-      let deliveryDetail = (shippingMethod === '宅配') ? document.getElementById('cust-address').value.trim() : document.getElementById('cust-store').value.trim();
+      let deliveryDetail = (shippingMethod === '宅配') 
+        ? document.getElementById('cust-address').value.trim() 
+        : document.getElementById('cust-store').value.trim();
+
+      if (!custName || !custPhone) {
+        showToast('請填寫完整姓名與電話！');
+        return;
+      }
+
+      if (!deliveryDetail) {
+        showToast(shippingMethod === '宅配' ? '請填寫宅配地址！' : '請填寫門市名稱與店號！');
+        return;
+      }
 
       const orderNum = 'HN' + new Date().toISOString().slice(0,10).replace(/-/g,'') + Math.floor(1000 + Math.random() * 9000);
-      const subtotal = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+      const subtotal = cart.reduce(function(sum, i) { return sum + (i.price * i.quantity); }, 0);
       const shippingFee = subtotal >= 1200 ? 0 : 60;
       const grandTotal = subtotal + shippingFee;
 
-      let msg = `【花言敘 Hua Narrative｜官方訂購單】\n`;
-      msg += `訂單編號：#${orderNum}\n`;
-      msg += `-----------------------------------\n`;
-      msg += `訂購人姓名：${custName}\n`;
-      msg += `聯絡電話：${custPhone}\n`;
-      msg += `取貨方式：${shippingMethod} (${deliveryDetail})\n`;
-      msg += `付款方式：${paymentMethod}\n`;
-      if (custNotes) msg += `訂單備註：${custNotes}\n`;
-      msg += `-----------------------------------\n`;
-      msg += `訂購商品清單：\n`;
+      let msg = "【花言敘 Hua Narrative｜官方訂購單】\n";
+      msg += "訂單編號：#" + orderNum + "\n";
+      msg += "-----------------------------------\n";
+      msg += "訂購人姓名：" + custName + "\n";
+      msg += "聯絡電話：" + custPhone + "\n";
+      msg += "取貨方式：" + shippingMethod + " (" + deliveryDetail + ")\n";
+      msg += "付款方式：" + paymentMethod + "\n";
+      if (custNotes) msg += "訂單備註：" + custNotes + "\n";
+      msg += "-----------------------------------\n";
+      msg += "訂購商品清單：\n";
       
-      cart.forEach((item, index) => {
-        msg += `${index + 1}. ${item.title} [${item.spec}] x ${item.quantity} (NT$ ${item.price * item.quantity})\n`;
+      cart.forEach(function(item, index) {
+        msg += (index + 1) + ". " + item.title + " [" + item.spec + "] x " + item.quantity + " (NT$ " + (item.price * item.quantity).toLocaleString() + ")\n";
       });
 
-      msg += `-----------------------------------\n`;
-      msg += `商品小計：NT$ ${subtotal.toLocaleString()}\n`;
-      msg += `預估運費：NT$ ${shippingFee === 0 ? '0 (已享免運)' : shippingFee}\n`;
-      msg += `應付總金額：NT$ ${grandTotal.toLocaleString()}\n`;
-      msg += `-----------------------------------\n`;
-      msg += `辛苦客服專員，再請幫我確認現貨狀況，謝謝！`;
+      msg += "-----------------------------------\n";
+      msg += "商品小計：NT$ " + subtotal.toLocaleString() + "\n";
+      msg += "預估運費：NT$ " + (shippingFee === 0 ? '0 (已享免運)' : shippingFee) + "\n";
+      msg += "應付總金額：NT$ " + grandTotal.toLocaleString() + "\n";
+      msg += "-----------------------------------\n";
+      msg += "辛苦客服專員，再請幫我確認現貨狀況，謝謝！";
 
       generatedOrderText = msg;
+
       copyTextToClipboard(msg);
 
-      const cleanLineId = LINE_OFFICIAL_ID.replace('@', '');
+      const cleanLineId = LINE_OFFICIAL_ID.trim().replace(/^@/, '');
       const encodedMsg = encodeURIComponent(msg);
       
-      const lineUrl = `https://line.me/R/oaMessage/@${cleanLineId}/?${encodedMsg}`;
-      document.getElementById('line-direct-link').href = lineUrl;
+      let lineUrl = "";
+      if (cleanLineId) {
+        lineUrl = "https://line.me/R/oaMessage/%40" + cleanLineId + "/?" + encodedMsg;
+      } else {
+        lineUrl = "https://line.me/R/msg/text/?" + encodedMsg;
+      }
 
-      document.getElementById('success-order-id').textContent = `訂單編號：#${orderNum}`;
+      const lineDirectBtn = document.getElementById('line-direct-link');
+      if (lineDirectBtn) {
+        lineDirectBtn.href = lineUrl;
+        lineDirectBtn.removeAttribute('target');
+      }
+
+      document.getElementById('success-order-id').textContent = '訂單編號：#' + orderNum;
       document.getElementById('copied-order-preview').innerText = msg;
 
+      if (API_URL) {
+        try {
+          fetch(API_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              orderNum: orderNum,
+              custName: custName,
+              custPhone: custPhone,
+              shippingMethod: shippingMethod,
+              deliveryDetail: deliveryDetail,
+              paymentMethod: paymentMethod,
+              custNotes: custNotes,
+              items: cart,
+              subtotal: subtotal,
+              shippingFee: shippingFee,
+              grandTotal: grandTotal,
+              createdAt: new Date().toISOString()
+            })
+          }).catch(function(err) { console.log('Google Sheets sync notice:', err); });
+        } catch(e) {}
+      }
+
       openSuccessModal();
-      
-      setTimeout(() => {
-        window.open(lineUrl, '_blank');
-      }, 300);
+      showToast('訂單明細已成功複製！');
+
+      window.location.href = lineUrl;
     }
 
     function copyTextToClipboard(text) {
@@ -828,11 +927,14 @@
       activeCategory = 'All';
       searchQuery = '';
       document.getElementById('search-input').value = '';
-      document.querySelectorAll('.category-btn').forEach(b => {
+      document.querySelectorAll('.category-btn').forEach(function(b) {
         b.classList.remove('active', 'bg-brand', 'text-white', 'border-brand');
         b.classList.add('bg-white', 'text-subtext', 'border-brand-border');
       });
-      document.querySelector('[data-category="All"]').classList.add('active', 'bg-brand', 'text-white', 'border-brand');
+      const allBtn = document.querySelector('[data-category="All"]');
+      if (allBtn) {
+        allBtn.classList.add('active', 'bg-brand', 'text-white', 'border-brand');
+      }
       renderProducts();
     }
 
@@ -840,7 +942,7 @@
       const toast = document.getElementById('toast-msg');
       document.getElementById('toast-text').textContent = message;
       toast.classList.remove('opacity-0', 'pointer-events-none');
-      setTimeout(() => {
+      setTimeout(function() {
         toast.classList.add('opacity-0', 'pointer-events-none');
       }, 2500);
     }
