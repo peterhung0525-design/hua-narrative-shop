@@ -267,8 +267,8 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
 const API_URL = "https://script.google.com/macros/s/AKfycbyMjjG23l41ANx-jQLQCxh-0yDquqicdrVsf-HhtNSb33TZc3XRkYTM_CJMYNGx93GR/exec";
 const LINE_OFFICIAL_ID = "@229ttqiy";
 
-// ★ Google 登入設定
-const GOOGLE_CLIENT_ID = "你的用戶端ID.apps.googleusercontent.com";
+// ★ Google 登入設定（已填入真實 ID）
+const GOOGLE_CLIENT_ID = "987657918120-58ubr6v1g43belgc0743cvk7djtj0krc.apps.googleusercontent.com";
 const ID_TOKEN_KEY = "hua_narrative_id_token";
 
 let products = [];
@@ -513,9 +513,6 @@ function getFallbackProducts() {
 
 /* =========================================================
    ★ 取得商品
-   - 一律呼叫 API（與原始檔一致，未登入不再只顯示 4 個預設商品）
-   - 已登入時自動附上 id_token
-   - API 失敗或回應錯誤時才退回預設商品
    ========================================================= */
 async function fetchProducts() {
   const grid = document.getElementById('product-grid');
