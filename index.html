@@ -61,13 +61,13 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
       <span class="block text-[11px] font-garamond tracking-[0.25em] text-brand uppercase mt-0.5">Hua Narrative</span>
     </div>
 
-    <!-- ★ 右侧：用户区 + 购物车 -->
+    <!-- ★ 右側：用戶區 + 購物車 -->
     <div class="flex items-center gap-1.5 sm:gap-2">
 
-      <!-- 未登录：Google 登入按钮容器 -->
+      <!-- 未登入：Google 登入按鈕容器 -->
       <div id="g_id_signin_container" class="flex items-center"></div>
 
-      <!-- 已登录：头像 + 名称 + 登出 -->
+      <!-- 已登入：頭像 + 名稱 + 登出 -->
       <div id="user-info" class="hidden items-center gap-1.5 sm:gap-2">
         <img id="user-avatar" class="w-7 h-7 rounded-full border border-brand-border object-cover bg-brand-light" alt="使用者頭像">
         <span id="user-name" class="hidden sm:inline text-xs text-charcoal max-w-[80px] truncate"></span>
@@ -159,7 +159,7 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
 
     <div id="cart-step-2" class="flex-grow flex flex-col overflow-y-auto p-4 space-y-4 hidden">
       <form id="checkout-form" onsubmit="event.preventDefault(); submitOrderToLine();" class="space-y-4 text-xs">
-        <!-- ★ 未登入提示区（只在未登入时显示） -->
+        <!-- ★ 未登入提示區（只在未登入時顯示） -->
         <div id="checkout-login-hint" class="hidden bg-amber-50 border border-amber-200 rounded p-3 text-[11px] text-amber-800 leading-relaxed">
           <p class="font-medium mb-1">結帳前請先登入</p>
           <p>送出訂單需要 Google 帳號驗證身份，請點擊右上角「使用 Google 帳號登入」後再送出。</p>
@@ -267,7 +267,7 @@ body { background-color: #F9F8F6; color: #2C2A29; font-family: 'Noto Serif TC', 
 const API_URL = "https://script.google.com/macros/s/AKfycbyMjjG23l41ANx-jQLQCxh-0yDquqicdrVsf-HhtNSb33TZc3XRkYTM_CJMYNGx93GR/exec";
 const LINE_OFFICIAL_ID = "@229ttqiy";
 
-// ★ Google 登入設定（步驟一取得的用戶端 ID）
+// ★ Google 登入設定
 const GOOGLE_CLIENT_ID = "你的用戶端ID.apps.googleusercontent.com";
 const ID_TOKEN_KEY = "hua_narrative_id_token";
 
@@ -281,6 +281,7 @@ let googleUser = null;
 
 document.addEventListener('DOMContentLoaded', function() {
   setupEventListeners();
+  fetchProducts();
   toggleShippingFields('store');
   updateCartUI();
   initGoogleSignIn();
@@ -296,7 +297,6 @@ function initGoogleSignIn() {
     gisPollCount++;
     if (gisPollCount > 100) {
       console.error('Google 登入程式庫載入失敗');
-      // 即使登入程式庫失效，仍可瀏覽預設商品
       useFallbackIfNoProducts();
       return;
     }
@@ -317,17 +317,14 @@ function initGoogleSignIn() {
       const payload = decodeJwtPayload(savedToken);
       googleUser = payload;
       showUserInfo(payload);
-      fetchProducts();   // 已登入：尝试用 API 获取真实商品
       return;
     } catch (e) {
       localStorage.removeItem(ID_TOKEN_KEY);
     }
   }
 
-  // 未登入：显示登录按钮，直接载入默认商品
   localStorage.removeItem(ID_TOKEN_KEY);
   showSignInButton();
-  fetchProducts();   // 未登入：内部会用 fallback
 }
 
 function handleCredentialResponse(response) {
@@ -338,9 +335,8 @@ function handleCredentialResponse(response) {
     googleUser = payload;
     showUserInfo(payload);
     showToast('登入成功，歡迎 ' + (payload.name || payload.email));
-    fetchProducts();   // 登入后重新加载真实商品（购物车保留）
+    fetchProducts();   // 登入後重新載入商品（購物車保留）
 
-    // 若用户已在结账页，隐藏未登入提示
     const hint = document.getElementById('checkout-login-hint');
     if (hint) hint.classList.add('hidden');
   } catch (e) {
@@ -392,7 +388,7 @@ function handleSignOut() {
   document.getElementById('user-name').textContent = '';
   showSignInButton();
   showToast('已登出');
-  fetchProducts();   // 登出后切回默认商品
+  fetchProducts();   // 登出後重新載入商品
 }
 
 function decodeJwtPayload(token) {
@@ -493,7 +489,7 @@ function bindGallerySwipe() {
   });
 }
 
-/* ========== 預設商品（未登入或 API 失敗時使用） ========== */
+/* ========== 預設商品（API 失效時使用） ========== */
 function getFallbackProducts() {
   return [
     { id: '1', title: '「敘白」極簡天然絲棉襯衫', category: 'Tops', price: 1280,
@@ -517,60 +513,43 @@ function getFallbackProducts() {
 
 /* =========================================================
    ★ 取得商品
-   未登入 → 直接用預設商品（不呼叫 API）
-   已登入 → 帶 Token 呼叫 API，失敗則退回預設商品
+   - 一律呼叫 API（與原始檔一致，未登入不再只顯示 4 個預設商品）
+   - 已登入時自動附上 id_token
+   - API 失敗或回應錯誤時才退回預設商品
    ========================================================= */
 async function fetchProducts() {
   const grid = document.getElementById('product-grid');
   const noProductsMsg = document.getElementById('no-products-msg');
 
+  grid.innerHTML = `<div class="col-span-full text-center py-16 space-y-3"><i class="fa-solid fa-spinner fa-spin text-3xl text-brand"></i><p class="text-subtext text-sm">正在載入「花言敘」選品...</p></div>`;
+
   const idToken = getIdToken();
   const loggedIn = idToken && !isTokenExpired(idToken);
 
-  // ★ 未登入：直接顯示預設商品，不呼叫 API
-  if (!loggedIn) {
-    if (idToken) localStorage.removeItem(ID_TOKEN_KEY);   // 清掉過期 token
-    noProductsMsg.classList.add('hidden');
-    products = getFallbackProducts();
-    renderProducts();
-    return;
-  }
-
-  // 已登入：呼叫 API
-  grid.innerHTML = `<div class="col-span-full text-center py-16 space-y-3"><i class="fa-solid fa-spinner fa-spin text-3xl text-brand"></i><p class="text-subtext text-sm">正在載入「花言敘」選品...</p></div>`;
-
   try {
-    const sep = API_URL.indexOf('?') > -1 ? '&' : '?';
-    const url = API_URL + sep + 'id_token=' + encodeURIComponent(idToken);
-    const res = await fetch(url);
-
-    const text = await res.text();
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (parseErr) {
-      throw new Error('商品 API 回應非 JSON');
+    let url = API_URL;
+    if (loggedIn) {
+      const sep = API_URL.indexOf('?') > -1 ? '&' : '?';
+      url = API_URL + sep + 'id_token=' + encodeURIComponent(idToken);
     }
 
-    // GAS 驗證失敗 → 退回預設商品，並提示重新登入
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('商品 API 回應異常');
+    const data = await res.json();
+
     if (data && data.error) {
       console.warn('API 驗證失敗：', data.error);
-      localStorage.removeItem(ID_TOKEN_KEY);
-      showSignInButton();
       products = getFallbackProducts();
-      renderProducts();
-      showToast('登入狀態已失效，已切換為預設商品，請重新登入');
-      return;
+    } else {
+      products = Array.isArray(data) && data.length > 0 ? data : getFallbackProducts();
     }
-
-    products = Array.isArray(data) && data.length > 0 ? data : getFallbackProducts();
-    renderProducts();
-
   } catch (err) {
     console.warn('商品載入失敗，改用預設商品：', err);
     products = getFallbackProducts();
-    renderProducts();
   }
+
+  noProductsMsg.classList.add('hidden');
+  renderProducts();
 }
 
 function useFallbackIfNoProducts() {
@@ -580,7 +559,7 @@ function useFallbackIfNoProducts() {
   }
 }
 
-/* ========== 渲染商品（多圖版本，不檢查登入） ========== */
+/* ========== 渲染商品（多圖版本） ========== */
 function renderProducts() {
   const grid = document.getElementById('product-grid');
   const noProductsMsg = document.getElementById('no-products-msg');
@@ -702,7 +681,7 @@ function setupEventListeners() {
   });
 }
 
-/* ========== 購物車：加入商品（不檢查登入） ========== */
+/* ========== 購物車：加入商品 ========== */
 function addToCartWithSpec(productId) {
   const p = products.find(function (item) { return String(item.id) === String(productId); });
   if (!p) return;
@@ -798,7 +777,6 @@ function goToCartStep(step) {
     ind2.className = "font-medium text-brand border-b-2 border-brand pb-0.5";
     ind1.className = "pb-0.5 text-subtext";
 
-    // ★ 未登入時顯示提示
     const hint = document.getElementById('checkout-login-hint');
     if (hint) {
       if (isLoggedIn()) hint.classList.add('hidden');
@@ -826,18 +804,16 @@ function buildLineUrl(message) {
 }
 
 /* =========================================================
-   ★ 送出訂單（唯一要求登入的環節）
+   ★ 送出訂單（需要登入）
    ========================================================= */
 async function submitOrderToLine() {
   if (cart.length === 0) { showToast('購物車內沒有商品！'); return; }
 
-  // ★ 結帳前檢查登入狀態
   const idToken = getIdToken();
   if (!idToken || isTokenExpired(idToken)) {
     localStorage.removeItem(ID_TOKEN_KEY);
     showSignInButton();
 
-    // 顯示結帳頁的提示
     const hint = document.getElementById('checkout-login-hint');
     if (hint) hint.classList.remove('hidden');
 
